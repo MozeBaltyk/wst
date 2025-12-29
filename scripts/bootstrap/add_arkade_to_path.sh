@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+ARKADE_BIN="$HOME/.arkade/bin"
+
+# Add for current session
+export PATH="$ARKADE_BIN:$PATH"
+
+# Determine shell config
+SHELL_RC="$HOME/.zshrc"
+if [ -n "$BASH_VERSION" ] || [[ "$SHELL" == */bash ]]; then
+    SHELL_RC="$HOME/.bashrc"
+fi
+
+# Add permanently if not already there
+if ! grep -Fxq 'export PATH="$HOME/.arkade/bin:$PATH"' "$SHELL_RC"; then
+    echo 'export PATH="$HOME/.arkade/bin:$PATH"' >> "$SHELL_RC"
+    echo "INFO: Added ~/.arkade/bin to PATH in $SHELL_RC"
+else
+    echo "INFO: ~/.arkade/bin already in PATH in $SHELL_RC"
+fi

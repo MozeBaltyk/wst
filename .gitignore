@@ -1,0 +1,7 @@
+.*.swp
+.govmomi
+.terraform*
+.vscode
+terraform.tfstate*
+nvim-linux*
+arkade

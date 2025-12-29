@@ -1,0 +1,82 @@
+# just --shell powershell.exe --shell-arg -c
+
+
+# Lists all available commands in the justfile.
+_help:
+    @just --list --unsorted
+
+# Bootstraps wsl in PowerShell for a new WSL instance.
+reset_wsl:
+    wsl --unregister ubuntu
+    wsl --install ubuntu
+
+
+# Verify prerequisites
+install_prerequisites:
+    @bash ./bootstrap/add_nopasswd.sh
+    @bash ./bootstrap/check_hostfile.sh
+    @bash ./bootstrap/check_wslconf.sh
+    @bash ./bootstrap/check_resolv_conf.sh
+    @bash ./bootstrap/add_arkade_to_path.sh
+
+# Updating and upgrading the system
+updates_system:
+    @bash ./bootstrap/update_system.sh
+
+# Installing and configuring zsh
+install_zsh:
+    @bash ./bootstrap/add_nopasswd.sh
+    @bash ./bootstrap/add_zsh.sh
+    @bash ./bootstrap/add_zsh_plugins.sh
+
+# Installing tmux terminal multiplexer
+install_tmux:
+    @bash ./bootstrap/add_tmux_autostart.sh
+    @bash ./bootstrap/install_tpm.sh
+    @bash ./bootstrap/check_tmuxsensible.sh
+    @bash ./bootstrap/check_tmuxlogging.sh
+
+# Installs a list of tools using _install and _annoying.
+install_tools:
+    @bash ./bootstrap/arkade.sh
+    @bash ./bootstrap/just.sh
+    @bash ./bootstrap/install_bat.sh
+    @bash ./bootstrap/annoying_tools.sh "jq"
+    @bash ./bootstrap/install_neovim.sh    
+    @bash ./bootstrap/annoying_tools.sh "fzf"
+    @bash ./bootstrap/fzf_support.sh 
+    @bash ./bootstrap/install_tools.sh "helm"
+    @bash ./bootstrap/install_tools.sh "k9s"
+    @bash ./bootstrap/annoying_tools.sh "krew"
+    @bash ./bootstrap/krew_path.sh
+    @bash ./bootstrap/install_tools.sh "kube-bench"
+    @bash ./bootstrap/install_tools.sh "kubecm"
+    @bash ./bootstrap/install_tools.sh "kubectl"
+    @bash ./bootstrap/install_tools.sh "kustomize"
+    @bash ./bootstrap/install_tools.sh "oc"
+    @bash ./bootstrap/install_tools.sh "openshift-install"
+    @bash ./bootstrap/install_tools.sh "operator-sdk"
+    @bash ./bootstrap/install_tools.sh "popeye"
+    @bash ./bootstrap/install_tools.sh "trivy"
+    @bash ./bootstrap/annoying_tools.sh "yq" 
+    @bash ./bootstrap/yq_completion.sh
+    @bash ./bootstrap/install_podman.sh
+    @bash ./bootstrap/install_ripgrep.sh 
+
+
+# A master function that runs the above functions in sequence to setup the system.
+all:
+    #!/usr/bin/env bash
+    printf "\n\e[1;33m========>            Starting system setup             <========\e[m\n"
+    printf "\n\e[1;90m---->                 Verify prerequisites                 <----\e[m\n"
+    just install_prerequisites
+    printf "\n\e[1;90m---->          Updating and upgrading the system           <----\e[m\n"
+    just updates_system
+    printf "\n\e[1;90m---->            Installing and configuring zsh            <----\e[m\n"
+    just install_zsh
+    printf "\n\e[1;90m---->         Installing tmux terminal multiplexer         <----\e[m\n"
+    just install_tmux
+    printf "\n\e[1;90m---->             Installing additional tools              <----\e[m\n"
+    just install_tools
+    printf "\n\e[1;90m---->                 Installing dev tools                 <----\e[m\n"
+    printf "\n\e[1;32m========>     System setup completed successfully!     <========\e[m\n"
