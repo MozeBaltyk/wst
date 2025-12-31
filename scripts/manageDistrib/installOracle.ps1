@@ -1,4 +1,4 @@
-# Sets up a WSL instance Ubuntu called "workstation" and runs bootstrap scripts.
+# Sets up a WSL instance OracleLinux called "workstation" and runs bootstrap scripts.
 
 [CmdletBinding()]
 param(
@@ -16,7 +16,7 @@ param(
 )
 
 # You can run this script directly, e.g.:
-#   .\installOracle.ps1 -WSLName workstation -DistroName Oracle -LinuxUser oracle
+#   .\installOracle.ps1 -WSLName workstation -DistroName Oracle -LinuxUser oracle -Legacy $true
 # Or let `menu.ps1` invoke it with named parameters.
 
 # Ensure we're running from a Windows path (avoid WSL UNC path translation problems when calling wsl.exe)
