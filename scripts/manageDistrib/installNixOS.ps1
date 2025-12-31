@@ -33,11 +33,10 @@ if ($existingDistros -contains $WSLName) {
 # 2) Get latest version of NixOS WSL distro from github and download it
 Write-Host "Downloading latest NixOS WSL distribution..."
 $LATEST_VERSION_URL = 'https://api.github.com/repos/nix-community/NixOS-WSL/releases/latest'
-$headers = @{ 'User-Agent' = 'PowerShell' }
 $LATEST_VERSION = (Invoke-RestMethod -Uri $LATEST_VERSION_URL -Headers $headers).tag_name
 $DOWNLOAD_URL = "https://github.com/nix-community/NixOS-WSL/releases/download/$LATEST_VERSION/nixos.wsl"
 $OutFile = Join-Path $env:TEMP "nixos.wsl"
-Invoke-WebRequest -Uri $DOWNLOAD_URL -Headers $headers -OutFile $OutFile
+Start-BitsTransfer -Source $DOWNLOAD_URL -Destination $OutFile
 
 # 3) Install new WSL instance from Ubuntu base
 Write-Host "Installing a new WSL instance named '$WSLName' from $DistroName..."
