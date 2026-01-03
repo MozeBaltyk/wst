@@ -33,6 +33,7 @@ if ($existingDistros -contains $WSLName) {
 # 2) Get latest version of NixOS WSL distro from github and download it
 Write-Host "Downloading latest NixOS WSL distribution..."
 $LATEST_VERSION_URL = 'https://api.github.com/repos/nix-community/NixOS-WSL/releases/latest'
+$headers = @{ 'User-Agent' = 'PowerShell' }
 $LATEST_VERSION = (Invoke-RestMethod -Uri $LATEST_VERSION_URL -Headers $headers).tag_name
 $DOWNLOAD_URL = "https://github.com/nix-community/NixOS-WSL/releases/download/$LATEST_VERSION/nixos.wsl"
 $OutFile = Join-Path $env:TEMP "nixos.wsl"
@@ -48,3 +49,7 @@ if ($existingDistros -notcontains $WSLName) {
     exit 1
 }
 Write-Host "✅ WSL instance '$WSLName' installed successfully."
+
+# 4) Update NixOS instance
+Write-Host "Configuring NixOS instance..."  
+wsl.exe -d $WSLName -- bash -lc 'sudo nix-channel --update && sudo nixos-rebuild switch'

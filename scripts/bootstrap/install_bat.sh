@@ -7,7 +7,7 @@ printf "\e[1;33mINFO\e[m: installing bat command...\n"
 sudo apt install -y bat >/dev/null 2>&1
 if ! grep -qF "alias bat" "$HOME/.zshrc"; then
     printf "\e[1;33mINFO\e[m: Appending alias for bat command to .zshrc...\n"
-    echo "alias bat='bat --color=always'" >> "$HOME/.zshrc"
+    echo "alias bat='batcat --color=always'" >> "$HOME/.zshrc"
 else
     printf "\e[1;34mINFO\e[m: alias bat \e[1;32mis already present in .zshrc.\n"
 fi
