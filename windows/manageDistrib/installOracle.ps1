@@ -105,14 +105,14 @@ Write-Host "This is your current Oracle version: $version"
 # 7) Copy workspace scripts into WSL instance and bootstrap it
 Write-Host "Copying workspace scripts into the WSL instance..."
 $installerDir   = Split-Path -Parent $MyInvocation.MyCommand.Definition     
-$workspaceRoot  = Split-Path -Parent (Split-Path -Parent $installerDir)     # ../../scripts/manageDistrib
+$workspaceRoot  = Split-Path -Parent (Split-Path -Parent $installerDir)     # ../../windows/manageDistrib
 $destPath = Join-Path -Path ("\\wsl$\" + $WSLName + "\home\" + $LinuxUser) -ChildPath 'workstation'
 if (-not (Test-Path $destPath)) { New-Item -ItemType Directory -Path $destPath -Force | Out-Null }
 
-# Copy all scripts directory to the WSL instance
-Copy-Item -Path (Join-Path $workspaceRoot 'scripts\justfile') -Destination $destPath -Force
-Copy-Item -Path (Join-Path $workspaceRoot 'scripts\bootstrap.sh') -Destination $destPath -Force
-Copy-Item -Path (Join-Path $workspaceRoot 'scripts\bootstrap') -Destination (Join-Path $destPath 'bootstrap') -Recurse -Force
+# Copy all linux directory to the WSL instance
+Copy-Item -Path (Join-Path $workspaceRoot 'linux\justfile') -Destination $destPath -Force
+Copy-Item -Path (Join-Path $workspaceRoot 'linux\bootstrap.sh') -Destination $destPath -Force
+Copy-Item -Path (Join-Path $workspaceRoot 'linux\bootstrap') -Destination (Join-Path $destPath 'bootstrap') -Recurse -Force
 
 # Set ownership and mark scripts executable (use explicit chmod +x and retry if necessary)
 Write-Host "Setting ownership and permissions inside the instance..."

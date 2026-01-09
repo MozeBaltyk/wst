@@ -1,50 +1,71 @@
-# 🛠️ Setup your Workstation 
-This repository contains:
+<p align="center">
+ <img src="assets/logo.png" alt="Project Logo" width="120">
+</p>
 
-- Powershell script to install and auto-setup WSL hosts all display in a menu
+<p align="center">
+  WST is a reproducible way to bootstrap a clean and consistent admin or development environment on WSL.
+</p>
 
-- bash scripts for bootstrapping an environment with [`arkade`](https://github.com/alexellis/arkade) and [`just`](https://github.com/casey/just).
+
+## ✨ What’s inside?
+
+This repository provides tools to quickly set up a workstation using **WSL**:
+
+- 🪟 **PowerShell script** to install and configure WSL distributions via an interactive menu
+- 🐧 **Bash scripts** to bootstrap a Linux environment using  
+  - [`arkade`](https://github.com/alexellis/arkade) for tool installation  
+  - [`just`](https://github.com/casey/just) as a task runner
 
 ---
 
-# 🧑‍💻 Who is this for?
-Everybody who need a clean, consistent admin and/or dev setup on WSL.
+## 🧑‍💻 Who is this for?
 
-Teams that want a reproducible way to configure their environment and get the similar env between team's members
+- Developers or administrators who want a **clean, consistent WSL setup**
+- Teams that need a **reproducible environment** across all members
+- Anyone tired of manually configuring tools on every new machine
 
+---
 
-# 📋 Requirements
+## 📋 Requirements
+
 - Git
-
-- WSL for Windows
-
+- Windows Subsystem for Linux (WSL)
 
 ## 🚀 Getting Started
 
-# ⚙️ How do I install and run it?
-Clone the repository:
+1. Clone the repository on your windows
 
-```bash
-git clone https://...
-cd wst
-```  
-
-If on Windows, run this PowerShell script to install Ubuntu LTS in WSL
-If you already have Ubuntu (WSL) installed just open your WSL terminal and continue to the next step.
+2. From powershell, just run the *menu*, it should show the way...
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File menu.ps1
 .\menu.ps1
 ```  
 
-🧪 What can I do with it? (Using just)
-
-Once the environment is bootstrapped, on your host inside `worstation` directory, use `just` to run tasks.
-
-Examples:
+3. If you already have Ubuntu installed on WSL (or not), you can still clone this project and use `bootstrap.sh` from terminal...
 
 ```bash
+git clone https://github.com/MozeBaltyk/wst.git
+cd wst/linux
+
 just all        # Runs the full setup
 just --list     # These commands show all available tasks defined in your justfile
 just update     # Refreshes components or pulls latest
+```
+
+## 📁 Repository Structure
+
+```bash
+tree -L 2
+.
+├── menu.ps1              # Menu and main orchestrator
+├── linux                 # Everything related to Ubuntu
+│   ├── bin               # Custom WSL commands and scripts
+│   ├── bootstrap         # Linux installation logic
+│   ├── bootstrap.sh      # Prepares prerequisites before running just
+│   └── justfile
+├── nixos                 # Everything related to NixOS
+└── windows               # Everything related to Windows
+    ├── localSettings     # Windows debloating and prerequisites
+    └── manageDistrib     # WSL distribution management scripts
 ```

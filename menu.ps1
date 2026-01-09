@@ -143,7 +143,7 @@ function Manage-Distrib {
 
     # Check installer script
     $scriptDir = if ($PSScriptRoot) { $PSScriptRoot }
-    $altDir  = Join-Path -Path $scriptDir -ChildPath 'scripts\manageDistrib'
+    $altDir  = Join-Path -Path $scriptDir -ChildPath 'windows\manageDistrib'
     $fullPath = Join-Path -Path $altDir -ChildPath $meta.InstallerScript
 
     if (-not $meta.InstallerScript) {
