@@ -59,13 +59,13 @@ just update     # Refreshes components or pulls latest
 tree -L 2
 .
 ├── menu.ps1              # Menu and main orchestrator
-├── linux                 # Everything related to Ubuntu
+├── linux                 # Everything related to Linux OS
 │   ├── bin               # Custom WSL commands and scripts
 │   ├── bootstrap         # Linux installation logic
 │   ├── bootstrap.sh      # Prepares prerequisites before running just
 │   └── justfile
 ├── nixos                 # Everything related to NixOS
 └── windows               # Everything related to Windows
-    ├── localSettings     # Windows debloating and prerequisites
+    ├── localSettings     # Script to setup Windows (debloating, install apps, etc)
     └── manageDistrib     # WSL distribution management scripts
 ```

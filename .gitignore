@@ -1,7 +1,15 @@
-.*.swp
-.govmomi
-.terraform*
-.vscode
-terraform.tfstate*
+# Logs
+logs/
+*.log
+
+# PowerShell
+*.psm1.user
+*.ps1.user
+*.ps1.xml
+
+# OS junk
+.DS_Store
+Thumbs.db
+.vscode*
 nvim-linux*
-arkade
+.*.swp

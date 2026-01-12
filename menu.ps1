@@ -11,7 +11,9 @@ function Show-Menu {
     while ($true) {
         Clear-Host
         # Ask user what to do
-        do { $action = Read-Host "Choose action: [I]nstall, [U]ninstall, [C]ancel" } while (-not ($action) -or ($action -notmatch '^[iuc]$'))
+        do { 
+            $action = Read-Host "Choose action: [I]nstall, [U]ninstall, [L]ocal Settings [C]ancel" 
+        } while (-not ($action) -or ($action -notmatch '^[iulc]$'))
 
         switch ($action.ToUpper()) {
             'I' {
@@ -38,9 +40,62 @@ function Show-Menu {
 
                 Uninstall-WSL -InstanceName $instanceName
             }
+            'L' {
+                $listScripts = Show-List-Scripts
+                if (-not $listScripts -or $listScripts.Count -eq 0) {
+                    Write-Host "No local settings scripts found."
+                    Read-Host "Press Enter to continue..."
+                    continue
+                }
+                $selectedScript = Read-Selection -Map $listScripts -Prompt "Enter number"
+                if ($null -eq $selectedScript) { Write-Host "Cancelled."; continue }
+
+                Write-Host "Invoking local settings script: $selectedScript"
+                try {
+                    & $selectedScript
+                } catch {
+                    Write-Warning "Local settings script failed: $_"
+                }
+            }
             'C' { Write-Host "Exiting."; return }
         }
     }
+}
+
+function Show-List-Scripts {
+    Clear-Host
+    Write-Host "Choose a local settings script to run:`n"
+    $scriptDir = if ($PSScriptRoot) { $PSScriptRoot }
+    $altDir  = Join-Path -Path $scriptDir -ChildPath 'windows\localSettings'
+    $files = Get-ChildItem -Path $altDir -Filter '*.ps1' -File |
+         Where-Object {
+             -not $_.Name.StartsWith('_')
+         }
+
+    $scriptMap = @{}
+    # Always expose a 0 => Cancel option
+    $scriptMap[0] = $null
+
+    if (-not $files -or $files.Count -eq 0) {
+        Write-Host "No local settings scripts found in $altDir."
+        return $scriptMap
+    }
+
+    for ($i = 0; $i -lt $files.Count; $i++) {
+        $idx = $i + 1
+
+        $prettyName = [System.IO.Path]::GetFileNameWithoutExtension($files[$i].Name) `
+            -replace '[-_]', ' '
+            
+
+        $prettyName = (Get-Culture).TextInfo.ToTitleCase($prettyName)
+
+        Write-Host " [$idx]  $prettyName"
+        $scriptMap[$idx] = $files[$i].FullName
+    }
+
+    Write-Host " [0]  Cancel"
+    return $scriptMap
 }
 
 function Show-WSLs {
