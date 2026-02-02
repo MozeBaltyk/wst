@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 LATEST_VERSION_URL="https://api.github.com/repos/alexellis/arkade/releases/latest"
 DOWNLOAD_URL="https://github.com/alexellis/arkade/releases/download"
 
