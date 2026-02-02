@@ -4,7 +4,7 @@
 
 # Resolve image path relative to this script
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$ImagePath = Resolve-Path "$ScriptDir\..\..\assets\background\SoM-wallpapers-1920x1080_2.jpg"
+$ImagePath = Resolve-Path "$ScriptDir\..\..\assets\wallpapers\SoM-1920x1080_2.jpg"
 
 # Set wallpaper style (Fill)
 Set-ItemProperty "HKCU:\Control Panel\Desktop" WallpaperStyle 10
