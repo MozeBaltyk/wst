@@ -1,0 +1,39 @@
+# ls
+alias l='ls -Flh'
+alias ll='ls -Flha'
+
+# git
+alias g='git'
+alias gs='git status --short'
+alias gS='git status'
+alias gd='git diff'
+alias gD='git diff --staged'
+alias ga='git add'
+alias gA='git add --update'
+alias gc='git commit'
+alias gco='git checkout'
+alias gcob='git checkout -b'
+alias gcom='git checkout master'
+alias gp='git push'
+alias gl='git log --decorate --oneline --graph'
+alias gL='git log -p --shortstat'
+alias mgs='nix run nixpkgs#mgitstatus --'
+alias mgS='nix run nixpkgs#mgitstatus -- -f'
+
+# tmux
+alias t='tmux'
+alias ta='tmux attach'
+
+# less
+alias less='less --RAW-CONTROL-CHARS'
+
+# nvim
+alias v='nvim'
+
+# convert to PDF
+alias officetopdf='libreoffice --headless --convert-to pdf'
+
+# fzf with bat preview
+alias bat='batcat --color=always'
+alias inv='nvim $(fzf -m --preview="bat --color=always {}")'
+alias xat='fzf --preview="bat --color=always --style=numbers --line-range=:500 {}"'
