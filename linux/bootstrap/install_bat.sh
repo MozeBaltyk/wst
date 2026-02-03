@@ -5,16 +5,9 @@ ZSH="$HOME/.oh-my-zsh"
 #cargo install --locked bat >/dev/null 2>&1
 printf "\e[1;33mINFO\e[m: installing bat command...\n"
 sudo apt install -y bat >/dev/null 2>&1
-if ! grep -qF "alias bat" "$HOME/.zshrc"; then
-    printf "\e[1;33mINFO\e[m: Appending alias for bat command to .zshrc...\n"
-    echo "alias bat='batcat --color=always'" >> "$HOME/.zshrc"
+if ! grep -qF "alias bat" "$HOME/.aliases"; then
+    printf "\e[1;33mINFO\e[m: Appending alias for bat command to .aliases...\n"
+    echo "alias bat='batcat --color=always'" >> "$HOME/.aliases"
 else
-    printf "\e[1;34mINFO\e[m: alias bat \e[1;32mis already present in .zshrc.\n"
+    printf "\e[1;34mINFO\e[m: alias bat \e[1;32mis already present in .aliases.\n"
 fi
-if ! grep -qF "BAT_THEME" "$HOME/.zshrc"; then
-    printf "\e[1;33mINFO\e[m: Adding bat theme to .zshrc...\n"
-    echo "export BAT_THEME='TwoDark'" >> "$HOME/.zshrc"
-else
-    printf "\e[1;34mINFO\e[m: bat theme \e[1;32mis already present in .zshrc.\n"
-fi
-

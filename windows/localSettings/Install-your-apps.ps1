@@ -6,11 +6,9 @@
 # Configuration
 # -----------------------------
 $apps = @(
-    "Beeper.Beeper",
     "Discord.Discord",
     "OpenWhisperSystems.Signal",
-    "Balena.Etcher",
-    "Obsidian.Obsidian"
+    "Balena.Etcher"
 )
 
 $maxRetries = 2
