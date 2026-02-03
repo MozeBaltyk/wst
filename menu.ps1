@@ -106,6 +106,12 @@ function Manage-Distrib {
         $wslName = $meta.DistroName
     }
 
+    # Prompt for username
+    $defaultUser = $meta.LinuxUser
+    $userInput = Read-Host "Enter Linux username [$defaultUser]"
+    $cleanInput = ($userInput -replace '[\u0000-\u001F\u007F]', '').Trim()
+    $linuxUser = if ([string]::IsNullOrWhiteSpace($cleanInput)) { $defaultUser } else { $cleanInput }
+
     # Check installer script
     $scriptDir = if ($PSScriptRoot) { $PSScriptRoot } else { Get-Location }
     $altDir = Join-Path $scriptDir 'windows\manageDistrib'
@@ -124,7 +130,7 @@ function Manage-Distrib {
 
     Write-Host "Installing $($meta.Name) as WSL instance '$wslName'..."
     try {
-        & $fullPath -WSLName $wslName -DistroName $meta.DistroName -LinuxUser $meta.LinuxUser -Legacy ([bool]$meta.Legacy) -ErrorAction Stop
+        & $fullPath -WSLName $wslName -DistroName $meta.DistroName -LinuxUser $linuxUser -Legacy ([bool]$meta.Legacy) -ErrorAction Stop
     } catch {
         Write-Warning "Installer failed: $_"
     }
@@ -157,12 +163,11 @@ function Menu-Install {
     for ($i = 0; $i -lt $distros.Count; $i++) {
         $items.Add($i, $distros[$i].Name)
     }
-    $items.Add('Back', '< Back to main menu')  # Add back option
 
     $keys = @($items.Keys)
     $choice = Select-InteractiveItem -Title "Install Linux distribution" -Items $items -Footer (Get-StatusFooter) -KeyList $keys
 
-    if ($null -eq $choice -or $choice -eq 'Back') { return }
+    if ($null -eq $choice) { return }
     Manage-Distrib -Index $choice
 }
 

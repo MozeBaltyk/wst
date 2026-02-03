@@ -15,8 +15,6 @@ reset_wsl:
 install_prerequisites:
     @bash ./bootstrap/add_nopasswd.sh
     @bash ./bootstrap/check_hostfile.sh
-    @bash ./bootstrap/check_wslconf.sh
-    @bash ./bootstrap/check_resolv_conf.sh
     @bash ./bootstrap/add_arkade_to_path.sh
 
 # Updating and upgrading the system

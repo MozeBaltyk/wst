@@ -48,16 +48,17 @@ wsl.exe -d $WSLName -u root bash -ic "echo '$LinuxUser ALL=(ALL) NOPASSWD:ALL' >
 wsl.exe -d $WSLName -u root bash -ic "chmod 0440 /etc/sudoers.d/$LinuxUser"
 
 # 5) Set DNS and default user in /etc/wsl.conf
-Write-Host "Configuring DNS and setting default user..."
-$wslConf = @"
+Write-Host "Set WSL configuration..."
+$wslConfContent = @"
 [boot]
 systemd=true
 [user]
 default=$LinuxUser
-[network]
-generateResolvConf = true
 "@
-wsl.exe -d $WSLName -u root bash -ic "echo '$wslConf' > /etc/wsl.conf"
+
+wsl.exe -d $WSLName -u root bash -c "cat <<EOF > /etc/wsl.conf
+$wslConfContent
+EOF"
 
 # 6) Display Ubuntu version
 Write-Host "Detecting the installed Ubuntu version..."
