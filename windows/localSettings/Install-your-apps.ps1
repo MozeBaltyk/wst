@@ -35,7 +35,6 @@ function Write-Log {
 # -----------------------------
 if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
     Write-Host "winget is not available on this system."
-    Read-Host "Press Enter to continue..."
     return
 }
 
@@ -59,7 +58,6 @@ if ($LASTEXITCODE -ne 0) {
     $sourceCheck = winget source list 2>&1
     if ($LASTEXITCODE -ne 0) {
         Write-Log "winget sources are broken. Aborting." "ERROR"
-        Read-Host "Press Enter to continue..."
         return
     }
 }
@@ -75,7 +73,6 @@ $apps | ForEach-Object { Write-Host " - $_" }
 $confirm = Read-Host "`nIs it ok for you? Type 'YES' to confirm"
 if ($confirm.ToUpper() -ne 'YES') {
     Write-Log "User cancelled installation"
-    Read-Host "Press Enter to continue..."
     return
 }
 
@@ -130,4 +127,3 @@ foreach ($app in $apps) {
 
 Write-Log "Installation run completed"
 Write-Host "`nAll done!"
-Read-Host "Press Enter to continue..."
