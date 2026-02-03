@@ -11,17 +11,15 @@ export PATH="$PATH:$HOME/.arkade/bin:/usr/local/bin"
 
 # --- CHECK ARG ---
 if [ -z "$TOOL" ]; then
-    echo "Error: No tool name provided."
+    printf "\e[1;31mERROR\e[m: No tool name provided.\n"
     exit 1
 fi
 
-
-
 # --- INSTALL TOOL ---
 if command -v "$TOOL" >/dev/null 2>&1; then
-    printf "\e[1;34mINFO\e[m: %s is already installed.\n" "$TOOL"
+    printf "\e[1;32mOK\e[m: %s is already installed.\n" "$TOOL"
 else
-    printf "\e[1;33mINFO\e[m: %s not found. Installing with arkade...\n" "$TOOL"
+    printf "\e[1;33mCHANGED\e[m: %s not found. Installing with arkade...\n" "$TOOL"
 
     if command -v arkade >/dev/null 2>&1; then
         arkade get "$TOOL" --quiet

@@ -1,15 +1,8 @@
-# just --shell powershell.exe --shell-arg -c
-
+# just
 
 # Lists all available commands in the justfile.
 _help:
     @just --list --unsorted
-
-# Bootstraps wsl in PowerShell for a new WSL instance.
-reset_wsl:
-    wsl --unregister ubuntu
-    wsl --install ubuntu
-
 
 # Verify prerequisites
 install_prerequisites:
@@ -30,14 +23,14 @@ install_zsh:
 # Installing tmux terminal multiplexer
 install_tmux:
     @bash ./bootstrap/add_tmux_autostart.sh
-    @bash ./bootstrap/install_tpm.sh
+    @bash ./bootstrap/add_tmux_tpm.sh
     @bash ./bootstrap/check_tmuxsensible.sh
     @bash ./bootstrap/check_tmuxlogging.sh
 
 # Installs a list of tools using _install and _annoying.
 install_tools:
-    @bash ./bootstrap/arkade.sh
-    @bash ./bootstrap/just.sh
+    @bash ./bootstrap/install_arkade.sh
+    @bash ./bootstrap/install_just.sh
     @bash ./bootstrap/install_bat.sh
     @bash ./bootstrap/annoying_tools.sh "jq"
     @bash ./bootstrap/install_neovim.sh    
@@ -57,7 +50,8 @@ install_tools:
     @bash ./bootstrap/install_tools.sh "popeye"
     @bash ./bootstrap/install_tools.sh "trivy"
     @bash ./bootstrap/annoying_tools.sh "yq" 
-    @bash ./bootstrap/yq_completion.sh
+    @bash ./bootstrap/completion_yq.sh
+    @bash ./bootstrap/completion_harshicorp.sh
     @bash ./bootstrap/install_podman.sh
     @bash ./bootstrap/install_ripgrep.sh 
 

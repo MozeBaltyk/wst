@@ -14,7 +14,7 @@ fi
 # Add permanently if not already there
 if ! grep -Fxq 'export PATH="$HOME/.arkade/bin:$PATH"' "$SHELL_RC"; then
     echo 'export PATH="$HOME/.arkade/bin:$PATH"' >> "$SHELL_RC"
-    echo "INFO: Added ~/.arkade/bin to PATH in $SHELL_RC"
+    printf "\e[1;33mCHANGED\e[m: Added ~/.arkade/bin to PATH in $SHELL_RC.\n"
 else
-    echo "INFO: ~/.arkade/bin already in PATH in $SHELL_RC"
+    printf "\e[1;32mOK\e[m: ~/.arkade/bin already in PATH in $SHELL_RC.\n"
 fi

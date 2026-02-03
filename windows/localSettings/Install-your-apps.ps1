@@ -49,13 +49,13 @@ Write-Log "Log file: $logFile"
 # Check winget sources
 # -----------------------------
 Write-Log "Checking winget sources..."
-$sourceCheck = winget source list 2>&1
+winget source list 2>&1
 
 if ($LASTEXITCODE -ne 0) {
     Write-Log "winget source list failed, attempting source update" "WARN"
     winget source update | Out-Null
 
-    $sourceCheck = winget source list 2>&1
+    winget source list 2>&1
     if ($LASTEXITCODE -ne 0) {
         Write-Log "winget sources are broken. Aborting." "ERROR"
         return

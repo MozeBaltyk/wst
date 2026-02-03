@@ -18,3 +18,6 @@ export PATH=$PATH:/usr/local/bin/nvim/bin
 export EDITOR=nvim
 export VISUAL=nvim
 export MANPAGER='nvim +Man!'
+
+# Krew
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"

@@ -132,8 +132,8 @@ fi
 # info "Done. Please open a new shell or source your .zshrc to finalize changes."
  
  if ! grep -qF "alias inv=" "$HOME/.zshrc"; then
-        printf "\e[1;33mINFO\e[m: Adding inv as an alias to vim...\n"
+        printf "\e[1;33mCHANGED\e[m: Adding inv as an alias to vim...\n"
         echo "alias inv='nvim \$(fzf -m --preview=\"batcat --color=always {}\")'" >> "$HOME/.zshrc"
     else
-        printf "\e[1;34mINFO\e[m: inv alias for neovim and fzf \e[1;32mis already present in .zshrc.\n"
+        printf "\e[1;32mOK\e[m: inv alias for neovim and fzf \e[1;32mis already present in .zshrc.\n"
     fi
