@@ -19,7 +19,7 @@ param(
 #   .\installUbuntuLTS.ps1 -WSLName workstation -DistroName Ubuntu -LinuxUser ubuntu
 # Or let `menu.ps1` invoke it with named parameters.
 
-# 1) Check if instance do not already exists before attempting installation
+# Check if instance do not already exists before attempting installation
 Write-Host "Check if instance '$WSLName' do not already exists..."
 $existingDistros = wsl.exe --list --quiet
 if ($existingDistros -contains $WSLName) {
@@ -27,7 +27,7 @@ if ($existingDistros -contains $WSLName) {
     exit 1
 }
 
-# 2) Install new WSL instance from Ubuntu base
+# Install new WSL instance from Ubuntu base
 Write-Host "Installing a new WSL instance named '$WSLName' from $DistroName..."
 wsl.exe --install --distribution $DistroName --name $WSLName --no-launch
 # After attempting to install
@@ -37,17 +37,17 @@ if ($existingDistros -notcontains $WSLName) {
     exit 1
 }
 
-# 3) Create new Linux user with UID 1000
+# Create new Linux user with UID 1000
 Write-Host "Creating user '$LinuxUser' with UID 1000..."
 wsl.exe -d $WSLName -u root bash -ic "adduser --uid 1000 --disabled-password --gecos '' $LinuxUser"
 wsl.exe -d $WSLName -u root bash -ic "usermod -aG sudo $LinuxUser"
 
-# 4) Grant passwordless sudo
+# Grant passwordless sudo
 Write-Host "Granting passwordless sudo to '$LinuxUser'..."
 wsl.exe -d $WSLName -u root bash -ic "echo '$LinuxUser ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/$LinuxUser"
 wsl.exe -d $WSLName -u root bash -ic "chmod 0440 /etc/sudoers.d/$LinuxUser"
 
-# 5) Set DNS and default user in /etc/wsl.conf
+# Set default user in /etc/wsl.conf
 Write-Host "Set WSL configuration..."
 $wslConfContent = @"
 [boot]
@@ -60,12 +60,7 @@ wsl.exe -d $WSLName -u root bash -c "cat <<EOF > /etc/wsl.conf
 $wslConfContent
 EOF"
 
-# 6) Display Ubuntu version
-Write-Host "Detecting the installed Ubuntu version..."
-$version = wsl.exe -d $WSLName -u root bash -ic "grep PRETTY_NAME /etc/os-release"
-Write-Host "This is your current Ubuntu version: $version"
-
-# 7) Copy workspace scripts into WSL instance and bootstrap it
+# Copy workspace scripts into WSL instance and bootstrap it
 Write-Host "Copying workspace scripts into the WSL instance..."
 $installerDir   = Split-Path -Parent $MyInvocation.MyCommand.Definition     
 $workspaceRoot  = Split-Path -Parent (Split-Path -Parent $installerDir)     # ../../windows/manageDistrib
@@ -98,6 +93,19 @@ Write-Host "Running bootstrap scripts inside the instance (this may take some ti
 $bootstrapCmd = 'cd ~/workstation && ./bootstrap.sh'
 wsl.exe -d $WSLName -u $LinuxUser bash -lc $bootstrapCmd
 
-# 8) Shut down WSL instance to apply changes
+# Shut down WSL instance to apply changes
 Write-Host "Shutting down the '$WSLName' instance to apply changes..."
 wsl.exe --terminate $WSLName
+
+# Update Windows Terminal settings
+# Write-Host "Updating Windows Terminal settings for profile '$($WSLName)'..."
+# $terminalSettingsScript = Join-Path $altDir 'terminalSettings.ps1'
+# if (Test-Path $terminalSettingsScript) {
+#     try {
+#         & $terminalSettingsScript -profileName $WSLName -ErrorAction Stop
+#     } catch {
+#         Write-Warning "Failed to update Windows Terminal settings: $_"
+#     }
+# } else {
+#     Write-Warning "Windows Terminal settings script not found: $terminalSettingsScript"
+# }

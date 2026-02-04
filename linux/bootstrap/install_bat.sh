@@ -11,7 +11,7 @@ else
     printf "\e[1;33mCHANGED\e[m: bat command installation successful.\n"
 fi
 
-if ! grep -qF "alias bat" "$HOME/.aliases"; then
+if ! grep -qF "alias bat" "$HOME/.aliases" >/dev/null 2>&1 ; then
     echo "alias bat='batcat --color=always'" >> "$HOME/.aliases"
     printf "\e[1;33mCHANGED\e[m: Appended alias for bat command to .aliases.\n"
 else
