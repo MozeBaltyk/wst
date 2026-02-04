@@ -29,6 +29,8 @@ alias less='less --RAW-CONTROL-CHARS'
 
 # nvim
 alias v='nvim'
+alias vi='nvim'
+alias vim='nvim'
 
 # convert to PDF
 alias officetopdf='libreoffice --headless --convert-to pdf'

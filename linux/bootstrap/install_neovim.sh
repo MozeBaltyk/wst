@@ -1,19 +1,34 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Colors for info messages
-CYAN="\e[1;34mINFO\e[m:"
-YELLOW="\e[1;33mINFO\e[m:"
+# Colors
+BLUE="\e[1;34m"
+YELLOW="\e[1;33m"
 GREEN="\e[1;32m"
+RED="\e[1;31m"
 RESET="\e[m"
 
 # Helper: print colored info
 info() {
-  echo -e "${CYAN} $1"
+  echo -e "${BLUE}INFO:${RESET} $1"
 }
 warn() {
-  echo -e "${YELLOW} $1"
+  echo -e "${YELLOW}WARN:${RESET} $1"
 }
+changed() {
+  echo -e "${YELLOW}CHANGED:${RESET} $1"
+}
+ok() {
+  echo -e "${GREEN}OK:${RESET} $1"
+}
+error() {
+  echo -e "${RED}ERROR:${RESET} $1"
+}
+
+# --- jq is required for this script ---
+if ! command -v jq >/dev/null 2>&1; then
+  arkade get jq --quiet
+fi
 
 # --- Get current & latest versions ---
 if command -v nvim >/dev/null 2>&1; then
@@ -34,10 +49,10 @@ else
   info "Neovim is installed at: $(which nvim) (version $CURRENT_VERSION)"
   info "Checking for updates (latest version: $LATEST_VERSION)..."
   if [[ "$CURRENT_VERSION" == "$LATEST_VERSION" ]]; then
-    info "Neovim $CURRENT_VERSION is already up-to-date."
+    ok "Neovim $CURRENT_VERSION is already up-to-date."
     exit 0
   fi
-  warn "A newer Neovim version $LATEST_VERSION is available. Updating..."
+  info "A newer Neovim version $LATEST_VERSION is available. Updating..."
   NVIM_URL="https://github.com/neovim/neovim/releases/download/stable/nvim-linux-x86_64.tar.gz"
 fi
 
@@ -59,50 +74,70 @@ sudo rm -rf /usr/local/nvim   # remove any old version
 sudo mv /tmp/nvim-linux-x86_64 /usr/local/nvim
 sudo chmod -R 755 /usr/local/nvim
 
-# Replace or create the symlink so `nvim` is on PATH
-sudo ln -sf /usr/local/nvim/bin/nvim /usr/local/bin/nvim
-
-info "Neovim has been installed/updated to version $LATEST_VERSION."
+changed "Neovim has been installed/updated to version $LATEST_VERSION."
 
 # --- Shell config updates ---
-# 1) Aliases: vi->nvim, vim->nvim
+# 1) Aliases: v->nvim, vi->nvim, vim->nvim
 ZSHRC="$HOME/.zshrc"
-if ! grep -qF "alias vi='nvim'" "$ZSHRC"; then
-  warn "Adding alias vi='nvim' to .zshrc..."
-  echo "alias vi='nvim'" >> "$ZSHRC"
+ZSHENV="$HOME/.zshenv"
+ALIAS_FILE="$HOME/.aliases"
+if ! grep -qF "alias v='nvim'" "$ALIAS_FILE"; then
+  echo "alias v='nvim'" >> "$ALIAS_FILE"
+  changed "Added alias v='nvim' to .aliases..."
 fi
-if ! grep -qF "alias vim='nvim'" "$ZSHRC"; then
-  warn "Adding alias vim='nvim' to .zshrc..."
-  echo "alias vim='nvim'" >> "$ZSHRC"
+if ! grep -qF "alias vi='nvim'" "$ALIAS_FILE"; then
+  echo "alias vi='nvim'" >> "$ALIAS_FILE"
+  changed "Added alias vi='nvim' to .aliases..."
+fi
+if ! grep -qF "alias vim='nvim'" "$ALIAS_FILE"; then
+  echo "alias vim='nvim'" >> "$ALIAS_FILE"
+  changed "Added alias vim='nvim' to .aliases..."
+fi
+if ! grep -qF "source $ALIAS_FILE" "$ZSHRC"; then
+  echo "source $ALIAS_FILE" >> "$ZSHRC"
+  changed "Sourced .aliases in .zshrc..."
 fi
 
-# 2) Default EDITOR
-# If you want the entire path:
-#    EDITOR="/usr/local/nvim/bin/nvim"
-# but now that /usr/local/bin/nvim is a symlink, we can just do /usr/local/bin/nvim
-if ! grep -q 'export EDITOR="/usr/local/bin/nvim"' "$ZSHRC"; then
-  warn "Making Neovim the default editor in .zshrc..."
-  if grep -q '^export EDITOR=' "$ZSHRC"; then
-    sed -i 's|^export EDITOR=.*|export EDITOR="/usr/local/bin/nvim"|' "$ZSHRC"
+# 2) Default EDITOR and VISUAL and MANPAGER to nvim
+if ! grep -q 'export PATH=$PATH:/usr/local/bin/nvim/bin' "$ZSHENV"; then
+  echo 'export PATH=$PATH:/usr/local/bin/nvim/bin' >> "$ZSHENV"
+  changed "Added Neovim to PATH in .zshenv..."
+fi
+if ! grep -q 'export EDITOR=nvim' "$ZSHENV"; then
+  if grep -q '^export EDITOR=' "$ZSHENV"; then
+    sed -i 's|^export EDITOR=.*|export EDITOR=nvim|' "$ZSHENV"
+    changed "Made Neovim the default editor in .zshenv..."
   else
-    echo 'export EDITOR="/usr/local/bin/nvim"' >> "$ZSHRC"
+    echo 'export EDITOR=nvim' >> "$ZSHENV"
+    changed "Made Neovim the default editor in .zshenv..."
+  fi
+fi
+if ! grep -q 'export VISUAL=nvim' "$ZSHENV"; then
+  if grep -q '^export VISUAL=' "$ZSHENV"; then
+    sed -i 's|^export VISUAL=.*|export VISUAL=nvim|' "$ZSHENV"
+    changed "Made Neovim the default visual editor in .zshenv..."
+  else
+    echo 'export VISUAL=nvim' >> "$ZSHENV"
+    changed "Made Neovim the default visual editor in .zshenv..."
+  fi
+fi
+if ! grep -q 'export MANPAGER=' "$ZSHENV"; then
+  if grep -q '^export MANPAGER=' "$ZSHENV"; then
+    sed -i "s|^export MANPAGER=.*|export MANPAGER='nvim +Man!'|" "$ZSHENV"
+    changed "Set Neovim as the default manpager in .zshenv..."
+  else
+    echo "export MANPAGER='nvim +Man!'" >> "$ZSHENV"
+    changed "Set Neovim as the default manpager in .zshenv..."
   fi
 fi
 
-# 3) PATH updates (not strictly necessary if we use the symlink above)
-# If you do want /usr/local/nvim/bin in your PATH:
-# if ! grep -qF 'export PATH=$PATH:/usr/local/nvim/bin' "$ZSHRC"; then
-#   echo 'export PATH=$PATH:/usr/local/nvim/bin' >> "$ZSHRC"
-# fi
-
 # --- Install vim-plug if needed ---  
 if [[ ! -f "$HOME/.config/nvim/autoload/plug.vim" ]]; then
-  warn "vim-plug not found. Installing..."
   curl -sfLo "$HOME/.config/nvim/autoload/plug.vim" --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  info "vim-plug installed."
+  changed "vim-plug installed."
 else
-  info "vim-plug is already installed."
+  ok "vim-plug is already installed."
 fi
 
 # --- Ensure init.vim has basic plug#begin / plug#end ---
@@ -110,30 +145,23 @@ NVIM_INIT="$HOME/.config/nvim/init.vim"
 SEARCH_STRING="call plug#begin('~/.config/nvim/plugged')"
 if [[ -f "$NVIM_INIT" ]]; then
   if ! grep -q "$SEARCH_STRING" "$NVIM_INIT"; then
-    warn "Adding basic vim-plug setup to init.vim..."
     echo -e "\ncall plug#begin('~/.config/nvim/plugged')" >> "$NVIM_INIT"
     echo "call plug#end()" >> "$NVIM_INIT"
+    changed "Added vim-plug setup to init.vim."
   else
-    info "init.vim already has vim-plug setup."
+    ok "init.vim already has vim-plug setup."
   fi
 else
-  warn "init.vim not found. Creating it with vim-plug setup..."
   mkdir -p "$(dirname "$NVIM_INIT")"
   echo "call plug#begin('~/.config/nvim/plugged')" >  "$NVIM_INIT"
   echo "call plug#end()"                          >> "$NVIM_INIT"
+  changed "Created init.vim with vim-plug setup."
 fi
 
 # --- Disable mouse mode in Neovim ---
 if ! grep -qE '^set mouse=' "$NVIM_INIT"; then
-  warn "Disabling mouse mode in Neovim..."
   echo "set mouse=" >> "$NVIM_INIT"
+  changed "Disabled mouse mode in Neovim."
 fi
 
 # info "Done. Please open a new shell or source your .zshrc to finalize changes."
- 
- if ! grep -qF "alias inv=" "$HOME/.zshrc"; then
-        printf "\e[1;33mCHANGED\e[m: Adding inv as an alias to vim...\n"
-        echo "alias inv='nvim \$(fzf -m --preview=\"batcat --color=always {}\")'" >> "$HOME/.zshrc"
-    else
-        printf "\e[1;32mOK\e[m: inv alias for neovim and fzf \e[1;32mis already present in .zshrc.\n"
-    fi

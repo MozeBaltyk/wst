@@ -17,14 +17,14 @@ chmod +x "$HOME/arkade"
 
 # Try installing to /usr/local/bin
 if sudo mv "$HOME/arkade" /usr/local/bin/ 2>/dev/null; then
-    printf "\e[1;32mSUCCES\e[m: arkade installed to /usr/local/bin\n"
+    printf "\e[1;33mCHANGED\e[m: arkade installed to /usr/local/bin\n"
 else
     # Fallback to ~/.arkade/bin
     printf "\e[1;33mWARN\e[m: Could not move to /usr/local/bin. Installing to ~/.arkade/bin...\n"
     mkdir -p "$HOME/.arkade/bin"
     mv "$HOME/arkade" "$HOME/.arkade/bin/"
     export PATH="$PATH:$HOME/.arkade/bin"
-    printf "\e[1;32mSUCCESS\e[m: arkade installed to ~/.arkade/bin\n"
+    printf "\e[1;33mCHANGED\e[m: arkade installed to ~/.arkade/bin\n"
 fi
 
 # Confirm installation
@@ -34,7 +34,7 @@ if ! command -v arkade >/dev/null 2>&1; then
 fi
 
 ARKADE_VERSION=$(arkade version | awk '/Version:/ { print $2 }')
-printf "\e[1;32mOK\e[m: arkade %s installed successfully.\n" "$ARKADE_VERSION"
+printf "\e[1;34mINFO\e[m: arkade %s installed successfully.\n" "$ARKADE_VERSION"
 
 # Append ~/.arkade/bin to shell config if not already present
 if ! grep -qF 'export PATH=$PATH:$HOME/.arkade/bin' "$HOME/.zshenv"; then

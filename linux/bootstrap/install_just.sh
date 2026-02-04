@@ -19,5 +19,3 @@ else
     printf "\e[1;33mCHANGED\e[m: Generating command completion file _just...\n"
     just --completions zsh > "$ZSH/completions/_just"
 fi
-
-

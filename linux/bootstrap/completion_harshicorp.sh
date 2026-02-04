@@ -1,4 +1,4 @@
-# Checks if the completion lines for packer, terraform, and vault exist in .zshrc and adds them if not.
+# Checks if the completion lines for harshicorp-like tools exist in .zshrc and adds them if not.
 #!/usr/bin/env bash
 ZSH="$HOME/.oh-my-zsh"
 ZSHRC="$HOME/.zshrc"

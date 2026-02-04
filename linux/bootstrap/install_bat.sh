@@ -12,8 +12,8 @@ else
 fi
 
 if ! grep -qF "alias bat" "$HOME/.aliases"; then
-    printf "\e[1;33mCHANGED\e[m: Appending alias for bat command to .aliases...\n"
     echo "alias bat='batcat --color=always'" >> "$HOME/.aliases"
+    printf "\e[1;33mCHANGED\e[m: Appended alias for bat command to .aliases.\n"
 else
     printf "\e[1;32mOK\e[m: alias bat \e[1;32mis already present in .aliases.\n"
 fi

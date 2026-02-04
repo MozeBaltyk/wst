@@ -6,9 +6,9 @@ _help:
 
 # Verify prerequisites
 install_prerequisites:
-    @bash ./bootstrap/add_nopasswd.sh
-    @bash ./bootstrap/check_hostfile.sh
-    @bash ./bootstrap/add_arkade_to_path.sh
+    @bash ./bootstrap/set_nopasswd.sh
+    @bash ./bootstrap/set_hostfile.sh
+    @bash ./bootstrap/set_arkade_to_path.sh
 
 # Updating and upgrading the system
 updates_system:
@@ -16,7 +16,6 @@ updates_system:
 
 # Installing and configuring zsh
 install_zsh:
-    @bash ./bootstrap/add_nopasswd.sh
     @bash ./bootstrap/add_zsh.sh
     @bash ./bootstrap/add_zsh_plugins.sh
 
@@ -24,22 +23,19 @@ install_zsh:
 install_tmux:
     @bash ./bootstrap/add_tmux_autostart.sh
     @bash ./bootstrap/add_tmux_tpm.sh
-    @bash ./bootstrap/check_tmuxsensible.sh
-    @bash ./bootstrap/check_tmuxlogging.sh
+    @bash ./bootstrap/add_tmuxsensible.sh
+    @bash ./bootstrap/add_tmuxlogging.sh
 
 # Installs a list of tools using _install and _annoying.
 install_tools:
     @bash ./bootstrap/install_arkade.sh
     @bash ./bootstrap/install_just.sh
     @bash ./bootstrap/install_bat.sh
-    @bash ./bootstrap/annoying_tools.sh "jq"
+    @bash ./bootstrap/install_podman.sh
+    @bash ./bootstrap/install_ripgrep.sh
     @bash ./bootstrap/install_neovim.sh    
-    @bash ./bootstrap/annoying_tools.sh "fzf"
-    @bash ./bootstrap/fzf_support.sh 
     @bash ./bootstrap/install_tools.sh "helm"
     @bash ./bootstrap/install_tools.sh "k9s"
-    @bash ./bootstrap/annoying_tools.sh "krew"
-    @bash ./bootstrap/krew_path.sh
     @bash ./bootstrap/install_tools.sh "kube-bench"
     @bash ./bootstrap/install_tools.sh "kubecm"
     @bash ./bootstrap/install_tools.sh "kubectl"
@@ -49,11 +45,17 @@ install_tools:
     @bash ./bootstrap/install_tools.sh "operator-sdk"
     @bash ./bootstrap/install_tools.sh "popeye"
     @bash ./bootstrap/install_tools.sh "trivy"
-    @bash ./bootstrap/annoying_tools.sh "yq" 
+    @bash ./bootstrap/annoying_tools.sh "jq"
+    @bash ./bootstrap/annoying_tools.sh "yq"
+    @bash ./bootstrap/annoying_tools.sh "vault"
+    @bash ./bootstrap/annoying_tools.sh "tofu"
+    @bash ./bootstrap/annoying_tools.sh "fzf"
+    @bash ./bootstrap/annoying_tools.sh "krew"
+    @bash ./bootstrap/completion_jq.sh
     @bash ./bootstrap/completion_yq.sh
     @bash ./bootstrap/completion_harshicorp.sh
-    @bash ./bootstrap/install_podman.sh
-    @bash ./bootstrap/install_ripgrep.sh 
+    @bash ./bootstrap/completion_fzf.sh
+    @bash ./bootstrap/krew_path.sh
 
 
 # A master function that runs the above functions in sequence to setup the system.

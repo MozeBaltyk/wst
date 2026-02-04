@@ -6,7 +6,7 @@ mkdir -p $ZSH/completions
 if [[ -s "$ZSH/completions/_rg" ]]; then
     printf "\e[1;32mOK\e[m: rg completion already exists.\n" >/dev/null 2>&1
 else
-    printf "\e[1;33mCHANGED\e[m: Generating command completion file _rg...\n"
     url="https://raw.githubusercontent.com/BurntSushi/ripgrep/master/complete/_rg"
     curl $url > "$ZSH/completions/_rg"
+    printf "\e[1;33mCHANGED\e[m: Generated command completion file _rg...\n"
 fi

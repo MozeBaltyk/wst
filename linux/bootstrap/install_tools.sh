@@ -44,12 +44,12 @@ if [ -n "$COMPLETION_OUTPUT" ]; then
     COMPLETION_FILE="$ZSH/completions/_$TOOL"
 
     if [[ -s "$COMPLETION_FILE" ]]; then
-        printf "\e[1;34mINFO\e[m: %s completion already exists.\n" "$TOOL"
+        printf "\e[1;32mOK\e[m: %s completion already exists.\n" "$TOOL"
     else
-        printf "\e[1;33mINFO\e[m: Generating command completion file _%s...\n" "$TOOL"
+        printf "\e[1;33mCHANGED\e[m: Generating command completion file _%s...\n" "$TOOL"
         echo "$COMPLETION_OUTPUT" > "$COMPLETION_FILE"
     fi
-else
-    printf "\e[1;33mINFO\e[m: %s does not support zsh completions or command failed.\n" "$TOOL"
+    else
+        printf "\e[1;33mWARNING\e[m: %s does not support zsh completions or command failed.\n" "$TOOL"
 fi
 
