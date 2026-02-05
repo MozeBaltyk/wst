@@ -8,7 +8,6 @@ $WallpaperDir = Resolve-Path "$ScriptDir\..\..\assets\wallpapers"
 
 if (-not (Test-Path $WallpaperDir)) {
     Write-Warning "Wallpaper directory not found: $WallpaperDir"
-    Read-Host "Press Enter to return to menu..."
     return
 }
 
@@ -18,7 +17,6 @@ $images = Get-ChildItem $WallpaperDir -File |
 
 if (-not $images) {
     Write-Host "No wallpapers found."
-    Read-Host "Press Enter to return to menu..."
     return
 }
 
@@ -37,7 +35,6 @@ $selectedPath = Select-InteractiveItem `
 
 if (-not $selectedPath) {
     Write-Host "Cancelled."
-    return
 }
 
 # Wallpaper style: Fill

@@ -1,4 +1,4 @@
-# Sets up a WSL instance Ubuntu
+# Sets up a WSL instance FedoraLinux
 
 [CmdletBinding()]
 param(
@@ -6,13 +6,13 @@ param(
     [string]$WSLName = "workstation",
 
     [Parameter(Mandatory=$false)]
-    [string]$DistroName = "Ubuntu",
+    [string]$DistroName = "FedoraLinux-43",
 
     [Parameter(Mandatory=$false)]
-    [string]$LinuxUser = "ubuntu",
+    [string]$LinuxUser = "fedora43",
 
     [Parameter(Mandatory=$false)]
-    [bool]$Legacy = $true
+    [bool]$Legacy = $false
 )
 
 # You can run this script directly, e.g.:
@@ -61,25 +61,25 @@ $wslConfContent
 EOF"
 
 # Copy workspace scripts into WSL instance and bootstrap it
-Write-Host "Define paths for copying scripts and dotfiles into the WSL instance..."
+Write-Host "Copying workspace scripts into the WSL instance..."
 $installerDir   = Split-Path -Parent $MyInvocation.MyCommand.Definition     
 $workspaceRoot  = Split-Path -Parent (Split-Path -Parent $installerDir)     # ../../windows/manageDistrib
-$destHome = "\\wsl$\$WSLName\home\$LinuxUser"
-$destPath = Join-Path -Path $destHome -ChildPath 'workstation'
+$destPath = Join-Path -Path ("\\wsl$\" + $WSLName + "\home\" + $LinuxUser) -ChildPath 'workstation'
 if (-not (Test-Path $destPath)) { New-Item -ItemType Directory -Path $destPath -Force | Out-Null }
 
 # Copy all linux directory to the WSL instance
-Write-Host "Copying workstation scripts into the WSL instance..."
-Copy-Item -Path (Join-Path $workspaceRoot 'linux\*') -Destination $destPath -Recurse -Force
-
-Write-Host "Copying dotfiles into the WSL instance..."
-Copy-Item -Path (Join-Path $workspaceRoot 'dotfiles\*') -Destination $destHome -Recurse -Force
+Copy-Item -Path (Join-Path $workspaceRoot 'linux\justfile') -Destination $destPath -Force
+Copy-Item -Path (Join-Path $workspaceRoot 'linux\bootstrap.sh') -Destination $destPath -Force
+Copy-Item -Path (Join-Path $workspaceRoot 'linux\bootstrap') -Destination (Join-Path $destPath 'bootstrap') -Recurse -Force
 
 # Set ownership and mark scripts executable (use explicit chmod +x and retry if necessary)
 Write-Host "Setting ownership and permissions inside the instance..."
-$chownCmd = "chown -R ${LinuxUser}:${LinuxUser} /home/${LinuxUser}"
+$chownCmd = "chown -R ${LinuxUser}:${LinuxUser} /home/${LinuxUser}/workstation"
 $chmodCmd = "chmod -R u+rwX /home/${LinuxUser}/workstation && find /home/${LinuxUser}/workstation -type f -name '*.sh' -exec chmod +x {} +"
-wsl.exe -d $WSLName -u root bash -lc "$chownCmd && $chmodCmd"
+$cleanup = "find /home/${LinuxUser}/workstation -type f \( -name '*.sh' -o -name justfile \) -exec sed -i 's/\\r$//' {} +"
+
+# Run both commands as root inside the new instance
+wsl.exe -d $WSLName -u root bash -lc "$chownCmd && $chmodCmd && $cleanup"
 
 # Confirm permission bits for bootstrap.sh; retry chmod if necessary
 $checkExec = wsl.exe -d $WSLName -u root bash -lc "test -x /home/${LinuxUser}/workstation/bootstrap.sh && echo OK || echo NOEXEC"
@@ -89,9 +89,9 @@ if ($checkExec.Trim() -ne 'OK') {
 }
 
 # Run bootstrap commands inside the instance as the linux user
-Write-Host "Running bootstrap scripts inside the instance (this may take some time)..."
-$bootstrapCmd = 'cd ~/workstation && ./bootstrap.sh'
-wsl.exe -d $WSLName -u $LinuxUser bash -lc $bootstrapCmd
+# Write-Host "Running bootstrap scripts inside the instance (this may take some time)..."
+# $bootstrapCmd = 'cd ~/workstation && ./bootstrap.sh'
+# wsl.exe -d $WSLName -u $LinuxUser bash -lc $bootstrapCmd
 
 # Shut down WSL instance to apply changes
 Write-Host "Shutting down the '$WSLName' instance to apply changes..."
@@ -99,13 +99,13 @@ wsl.exe --terminate $WSLName
 
 # After successful WSL install
 Write-Host "Waiting for WSL instance '$wslName' to fully register..."
-Start-Sleep -Seconds 10
+Start-Sleep -Seconds 5
 
 # Restart WSL instance
 Write-Host "Restarting the '$WSLName' instance..."
 wsl.exe -d $WSLName -u $LinuxUser bash -ic "exit"
-Start-Sleep -Seconds 10
+Start-Sleep -Seconds 5
 
 # Refresh Terminal profile
 Start-Process wt.exe -ArgumentList "wsl.exe -d $WSLName -e sh -c 'exit'" -WindowStyle Hidden
-Start-Sleep -Seconds 10
+Start-Sleep -Seconds 5

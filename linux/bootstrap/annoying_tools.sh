@@ -1,5 +1,6 @@
-# A similar function to _install, but doesn't generate command completion file.
 #!/usr/bin/env bash
+
+# A similar function to _install, but doesn't generate command completion file.
 export PATH="$PATH:$HOME/.arkade/bin:/usr/local/bin"
 
 if [ -z "$1" ]; then

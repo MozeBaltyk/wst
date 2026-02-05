@@ -3,11 +3,13 @@
 # =========================
 
 $distros = @(
-    [PSCustomObject]@{ Name='Ubuntu 24.04 LTS'; DistroName='Ubuntu-24.04'; InstallerScript='installUbuntuLTS.ps1'; LinuxUser='ubuntu'; Legacy=$false },
-    [PSCustomObject]@{ Name='Oracle 9.5';       DistroName='OracleLinux_9_5'; InstallerScript='installOracle.ps1';    LinuxUser='oracle'; Legacy=$true  },
-    [PSCustomObject]@{ Name='Oracle 8.10';      DistroName='OracleLinux_8_10'; InstallerScript='installOracle.ps1';    LinuxUser='oracle'; Legacy=$true  },
-    [PSCustomObject]@{ Name='NixOS';            DistroName='NixOS';            InstallerScript='installNixOS.ps1';     LinuxUser='nixos';  Legacy=$false }
-)
+    [PSCustomObject]@{ Name='Ubuntu 24.04 LTS'; DistroName='Ubuntu-24.04'; InstallerScript='installUbuntuLTS.ps1'; LinuxUser='ubuntu'; Legacy=$false; TerminalTheme='Dark+' },
+    [PSCustomObject]@{ Name='Fedora Linux 43'; DistroName='FedoraLinux-43'; InstallerScript='installFedoraLinux.ps1'; LinuxUser='fedora'; Legacy=$false; TerminalTheme='One Half Dark' },
+    [PSCustomObject]@{ Name='NixOS';            DistroName='NixOS';            InstallerScript='installNixOS.ps1';     LinuxUser='nixos';  Legacy=$false; TerminalTheme='Campbell'}
+    # I do not manage legacy distrib in WSL
+    # [PSCustomObject]@{ Name='Oracle 9.5';       DistroName='OracleLinux_9_5'; InstallerScript='installOracle.ps1';    LinuxUser='oracle'; Legacy=$true;  TerminalTheme='One Half Dark'},
+    # [PSCustomObject]@{ Name='Oracle 8.10';      DistroName='OracleLinux_8_10'; InstallerScript='installOracle.ps1';    LinuxUser='oracle'; Legacy=$true; TerminalTheme='One Half Dark' }
+    )
 
 # =========================
 # UI Helpers
@@ -87,7 +89,6 @@ function Manage-Distrib {
     }
 
     $meta = $distros[$Index]
-    $wslName = $null  # <-- Use local variable instead of modifying $meta
 
     # Prompt for WSL instance name if not legacy
     if ($meta.Legacy -eq $false) {
@@ -112,10 +113,16 @@ function Manage-Distrib {
     $cleanInput = ($userInput -replace '[\u0000-\u001F\u007F]', '').Trim()
     $linuxUser = if ([string]::IsNullOrWhiteSpace($cleanInput)) { $defaultUser } else { $cleanInput }
 
+    # Prompt for Terminal theme
+    $defaultTheme = $meta.TerminalTheme
+    $userTheme = Read-Host "Enter terminal theme [$defaultTheme]"
+    $themeToUse = if ([string]::IsNullOrWhiteSpace($userTheme)) { $defaultTheme } else { $userTheme }
+
     # Check installer script
     $scriptDir = if ($PSScriptRoot) { $PSScriptRoot } else { Get-Location }
     $altDir = Join-Path $scriptDir 'windows\manageDistrib'
     $fullPath = Join-Path $altDir $meta.InstallerScript
+    $terminalScriptPath = Join-Path $altDir 'terminalSettings.ps1'
 
     if (-not $meta.InstallerScript) {
         Write-Warning "No installer configured for $($meta.Name)."
@@ -127,12 +134,38 @@ function Manage-Distrib {
         Read-Host "Press Enter to continue..."
         return
     }
+    if (-not (Test-Path $terminalScriptPath)) {
+        Write-Warning "Terminal settings script '$($terminalScriptPath)' not found in $altDir."
+        Read-Host "Press Enter to continue..."
+        return
+    }
 
     Write-Host "Installing $($meta.Name) as WSL instance '$wslName'..."
+    $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
+
+    # Install WSL distribution
     try {
-        & $fullPath -WSLName $wslName -DistroName $meta.DistroName -LinuxUser $linuxUser -Legacy ([bool]$meta.Legacy) -ErrorAction Stop
-    } catch {
+        & $fullPath `
+            -WSLName $wslName `
+            -DistroName $meta.DistroName `
+            -LinuxUser $linuxUser `
+            -Legacy ([bool]$meta.Legacy) `
+            -ErrorAction Stop
+    }
+    catch {
         Write-Warning "Installer failed: $_"
+    }
+    finally {
+        $stopwatch.Stop()
+        Write-Host ("Installation completed in {0:N2} seconds" -f $stopwatch.Elapsed.TotalSeconds)
+    }
+
+    # Update terminal profile
+    try {
+        & $terminalScriptPath -profileName $wslName -colorScheme $themeToUse
+    }
+    catch {
+        Write-Warning "Terminal profile update failed: $_"
     }
 
     Read-Host "Press Enter to continue..."

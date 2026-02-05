@@ -1,5 +1,6 @@
-# Checks for a tool, installs with arkade if needed, and creates its command completion.
 #!/usr/bin/env bash
+
+# Checks for a tool, installs with arkade if needed, and creates its command completion.
 
 # --- CONFIG ---
 TOOL="$1"

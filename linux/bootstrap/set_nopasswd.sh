@@ -1,5 +1,6 @@
-# Adds the current user to the NOPASSWD sudo access if it's not already there.
 #!/usr/bin/env bash
+
+# Adds the current user to the NOPASSWD sudo access if it's not already there.
 if sudo --non-interactive true 2>/dev/null; then
     printf "\e[1;32mOK\e[m: ${USER} \e[1;32mhas NOPASSWD sudo access.\n"
 else

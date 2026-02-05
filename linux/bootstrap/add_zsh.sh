@@ -1,5 +1,6 @@
-# Installs and sets zsh as default shell and installs oh-my-zsh if needed.
 #!/usr/bin/env bash
+
+# Installs and sets zsh as default shell and installs oh-my-zsh if needed.
 if command -v zsh >/dev/null 2>&1; then
     omz update >/dev/null 2>&1
     printf "\e[1;32mOK\e[m: zsh \e[1;32mis already installed and udpated.\n"

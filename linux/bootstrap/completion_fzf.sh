@@ -1,5 +1,6 @@
-# Adds fzf completion and key-binfing
 #!/usr/bin/env bash
+
+# Adds fzf completion and key-binfing
 ZSH="$HOME/.oh-my-zsh"
 ZSH_COMPLETIONS_DIR="$ZSH/completions"
 URL="https://raw.githubusercontent.com/junegunn/fzf/master/shell"

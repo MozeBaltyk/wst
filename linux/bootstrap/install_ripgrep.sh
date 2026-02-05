@@ -1,6 +1,9 @@
-# Installs ripgrep and generates its command completion file.
 #!/usr/bin/env bash
+
+# Installs ripgrep and generates its command completion file.
+
 ZSH="$HOME/.oh-my-zsh"
+
 sudo apt install -y ripgrep >/dev/null 2>&1
 mkdir -p $ZSH/completions
 if [[ -s "$ZSH/completions/_rg" ]]; then

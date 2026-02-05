@@ -1,5 +1,5 @@
-# Adds zsh-syntax-highlighting and zsh-autosuggestions plugins if they are not already installed.
 #!/usr/bin/env bash
+
 ZSH="$HOME/.oh-my-zsh"
 # --- zsh-syntax-highlighting ---
 URL="https://github.com/zsh-users/zsh-syntax-highlighting.git"
@@ -27,5 +27,5 @@ if ! grep -q "zsh-autosuggestions" ~/.zshrc; then
 fi
 # --- Ensure compinit is called ---
 sed -i "/^autoload -U compinit; compinit/d" "$HOME/.zshrc"
-echo "autoload -U compinit; compinit" >> "$HOME/.zshrc."
+echo "autoload -U compinit; compinit" >> "$HOME/.zshrc"
 printf "\e[1;33mCHANGED\e[m: compinit added to .zshrc.\n"

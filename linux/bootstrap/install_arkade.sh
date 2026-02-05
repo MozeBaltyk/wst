@@ -1,7 +1,8 @@
+#!/usr/bin/env bash
+
 # This script provides steps to install and update arkade on Ubuntu
 ## conditionals are used to check if the step is already done or not
 # Installs or updates arkade and adds its bin path to $PATH.
-#!/usr/bin/env bash
 
 set -euo pipefail
 

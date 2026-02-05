@@ -1,11 +1,13 @@
-# Checks if tmux-logging plugin is installed and adds it if not.
 #!/usr/bin/env bash
+tmux_config_path="$HOME/.config/tmux"
+tmux_config_file="$tmux_config_path/tmux.conf"
+
 if command -v tmux >/dev/null 2>&1; then
-    if grep -q "set -g @plugin 'tmux-plugins/tmux-logging'" ~/.tmux.conf; then
-        printf "\e[1;32mOK\e[m: tmux-logging \e[1;32mis present in ~/.tmux.conf.\n"
+    if grep -q "set -g @plugin 'tmux-plugins/tmux-logging'" "$tmux_config_file"; then
+        printf "\e[1;32mOK\e[m: tmux-logging \e[1;32mis present in $tmux_config_file.\n"
     else
-        printf "set -g @plugin 'tmux-plugins/tmux-logging'\n" >> ~/.tmux.conf
-        printf "\e[1;33mCHANGED\e[m: tmux-logging line has been added to ~/.tmux.conf.\n"
+        printf "set -g @plugin 'tmux-plugins/tmux-logging'\n" >> "$tmux_config_file"
+        printf "\e[1;33mCHANGED\e[m: tmux-logging line has been added to $tmux_config_file.\n"
         printf "\e[1;34mINFO\e[m: Please restart your tmux session to activate the plugin.\n"
     fi
 else

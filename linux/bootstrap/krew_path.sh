@@ -1,6 +1,7 @@
-# Adds krew path
-# _krew_path:
 #!/usr/bin/env bash
+
+# Adds krew path
+
 if ! grep -qF 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' "$HOME/.zshenv"; then
     echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> "$HOME/.zshenv"
     printf "\e[1;33mCHANGED\e[m: Appended krew bin path to .zshenv.\n"

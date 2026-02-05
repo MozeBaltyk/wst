@@ -6,6 +6,8 @@
 # Configuration
 # -----------------------------
 $apps = @(
+    "JAMSoftware.TreeSize.Free",
+    "Watfaq.PowerSession",
     "Discord.Discord",
     "OpenWhisperSystems.Signal",
     "Balena.Etcher"

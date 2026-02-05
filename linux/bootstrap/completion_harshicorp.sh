@@ -1,5 +1,6 @@
-# Checks if the completion lines for harshicorp-like tools exist in .zshrc and adds them if not.
 #!/usr/bin/env bash
+
+# Checks if the completion lines for harshicorp-like tools exist in .zshrc and adds them if not.
 ZSH="$HOME/.oh-my-zsh"
 ZSHRC="$HOME/.zshrc"
 

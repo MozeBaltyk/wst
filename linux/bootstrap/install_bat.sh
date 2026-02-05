@@ -1,8 +1,6 @@
-# Installs bat and generates its command completion file.
 #!/usr/bin/env bash
-ZSH="$HOME/.oh-my-zsh"
-#curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -yq >/dev/null 2>&1
-#cargo install --locked bat >/dev/null 2>&1
+
+# Installs bat and generates its command completion file.
 
 if command -v batcat >/dev/null 2>&1; then
     printf "\e[1;32mOK\e[m: bat command installed successfully as batcat.\n"

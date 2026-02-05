@@ -1,6 +1,6 @@
-# Adds command completion for yq.
-#_yq_completion:
 #!/usr/bin/env bash
+
+# Adds command completion for yq.
 ZSH="$HOME/.oh-my-zsh"
 mkdir -p $ZSH/completions
 if [[ -s "$ZSH/completions/_yq" ]]; then
