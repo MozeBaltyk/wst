@@ -6,7 +6,7 @@ ARKADE_BIN="$HOME/.arkade/bin"
 export PATH="$ARKADE_BIN:$PATH"
 
 # Determine shell config
-SHELL_RC="$HOME/.zshrc"
+SHELL_RC="$HOME/.zshenv"
 if [ -n "$BASH_VERSION" ] || [[ "$SHELL" == */bash ]]; then
     SHELL_RC="$HOME/.bashrc"
 fi

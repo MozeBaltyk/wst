@@ -73,6 +73,7 @@ popd >/dev/null
 sudo rm -rf /usr/local/nvim   # remove any old version
 sudo mv /tmp/nvim-linux-x86_64 /usr/local/nvim
 sudo chmod -R 755 /usr/local/nvim
+sudo ln -sf /usr/local/nvim/bin/nvim /usr/local/bin/nvim
 
 changed "Neovim has been installed/updated to version $LATEST_VERSION."
 
@@ -99,8 +100,8 @@ if ! grep -qF "source $ALIAS_FILE" "$ZSHRC"; then
 fi
 
 # 2) Default EDITOR and VISUAL and MANPAGER to nvim
-if ! grep -q 'export PATH=$PATH:/usr/local/bin/nvim/bin' "$ZSHENV"; then
-  echo 'export PATH=$PATH:/usr/local/bin/nvim/bin' >> "$ZSHENV"
+if ! grep -q 'export PATH=$PATH:/usr/local/nvim/bin/nvim' "$ZSHENV"; then
+  echo 'export PATH=$PATH:/usr/local/nvim/bin/nvim' >> "$ZSHENV"
   changed "Added Neovim to PATH in .zshenv..."
 fi
 if ! grep -q 'export EDITOR=nvim' "$ZSHENV"; then

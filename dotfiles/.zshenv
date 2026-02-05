@@ -14,7 +14,7 @@ export GOPATH="$HOME/.local"
 export CARGO_HOME="$HOME/.local"
 
 # Nvim
-export PATH=$PATH:/usr/local/bin/nvim/bin
+export PATH=$PATH:/usr/local/nvim/bin/nvim
 export EDITOR=nvim
 export VISUAL=nvim
 export MANPAGER='nvim +Man!'

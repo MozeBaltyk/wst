@@ -26,14 +26,20 @@ install_tmux:
     @bash ./bootstrap/add_tmuxsensible.sh
     @bash ./bootstrap/add_tmuxlogging.sh
 
-# Installs a list of tools using _install and _annoying.
-install_tools:
+# Install custom tools and utilities
+install_custom_tools:
     @bash ./bootstrap/install_arkade.sh
     @bash ./bootstrap/install_just.sh
     @bash ./bootstrap/install_bat.sh
     @bash ./bootstrap/install_podman.sh
     @bash ./bootstrap/install_ripgrep.sh
-    @bash ./bootstrap/install_neovim.sh    
+
+# Install Neovim (or update if already installed)
+install_neovim:
+    @bash ./bootstrap/install_neovim.sh
+
+# Installs a list of tools based on arkade using _install and _annoying.
+install_tools:  
     @bash ./bootstrap/install_tools.sh "helm"
     @bash ./bootstrap/install_tools.sh "k9s"
     @bash ./bootstrap/install_tools.sh "kube-bench"
@@ -71,6 +77,8 @@ all:
     printf "\n\e[1;90m---->         Installing tmux terminal multiplexer         <----\e[m\n"
     just install_tmux
     printf "\n\e[1;90m---->             Installing additional tools              <----\e[m\n"
+    just install_custom_tools
+    just install_neovim
     just install_tools
     printf "\n\e[1;90m---->                 Installing dev tools                 <----\e[m\n"
     printf "\n\e[1;32m========>     System setup completed successfully!     <========\e[m\n"

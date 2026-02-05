@@ -24,12 +24,12 @@ if ! grep -q "tmux" ~/.zshrc; then
     sed -i 's/^plugins=(/plugins=(tmux /' ~/.zshrc
     printf "\e[1;33mCHANGED\e[m: tmux plugin has been added to .zshrc.\n"
 else
-    printf "\e[1;32mOK\e[m: tmux plugin \e[1;32mis already present in .zshrc.\n"
+    printf "\e[1;32mOK\e[m: tmux plugin is already present in .zshrc.\n"
 fi
 # Enable mouse mode in tmux config if not already present
 if ! grep -q "set-option -g mouse on" "$tmux_config_file"; then
     echo "set-option -g mouse on" >> "$tmux_config_file"
     printf "\e[1;33mCHANGED\e[m: Mouse mode has been added to $tmux_config_file.\n"
 else
-    printf "\e[1;32mOK\e[m: Mouse mode \e[1;32mis already present in $tmux_config_file.\n"
+    printf "\e[1;32mOK\e[m: Mouse mode is already present in $tmux_config_file.\n"
 fi
