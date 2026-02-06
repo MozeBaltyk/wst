@@ -103,9 +103,9 @@ Start-Sleep -Seconds 10
 
 # Restart WSL instance
 Write-Host "Restarting the '$WSLName' instance..."
-wsl.exe -d $WSLName -u $LinuxUser bash -ic "exit"
+wsl.exe -d $WSLName -u $LinuxUser bash -ic "sleep 10 && exit"
 Start-Sleep -Seconds 10
 
 # Refresh Terminal profile
-Start-Process wt.exe -ArgumentList "wsl.exe -d $WSLName -e sh -c 'exit'" -WindowStyle Hidden
+Start-Process wt.exe -ArgumentList "wsl.exe -d $WSLName -e sh -c 'sleep 10 && exit'" -WindowStyle Hidden
 Start-Sleep -Seconds 10

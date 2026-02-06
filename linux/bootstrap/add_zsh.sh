@@ -17,13 +17,6 @@ fi
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     git clone https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
     printf "\e[1;33mCHANGED\e[m: Oh-My-Zsh installed to $HOME/.oh-my-zsh\n"
-    if [ -f "$HOME/.zshrc" ]; then
-        printf "\e[1;34mINFO\e[m: Moving existing .zshrc to backup...\n"
-        mv "$HOME/.zshrc" "$HOME/.zshrc-`date +%Y%m%d%H%M%S`"
-    else
-        cp "$HOME/.oh-my-zsh/templates/zshrc.zsh-template" "$HOME/.zshrc"
-        printf "\e[1;33mCHANGED\e[m: Created new .zshrc from template.\n"
-    fi
 else
     printf "\e[1;32mOK\e[m: Oh My Zsh \e[1;32mis already installed.\n"
 fi
@@ -36,5 +29,3 @@ fi
 ZSHRC_BACKUP="$HOME/.zshrc-`date +%Y%m%d%H%M%S`"
 cp "$HOME/.zshrc" "$ZSHRC_BACKUP"
 printf "\e[1;33mCHANGED\e[m: Backed up .zshrc to $ZSHRC_BACKUP\n"
-sed -i -e '/^#.*$/d' -e '/^$/d' "$HOME/.zshrc"
-printf "\e[1;33mCHANGED\e[m: Cleaned up .zshrc...\n"

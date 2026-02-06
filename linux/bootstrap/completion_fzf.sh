@@ -35,9 +35,9 @@ printf "\e[1;33mCHANGED\e[m: key-bindings.zsh added to ~/.zshrc.\n"
 fi
 
 # Add inv alias for fzf + neovim if not present
-if ! grep -qF "alias inv=" "$HOME/.zshrc"; then
-  echo "alias inv='nvim \$(fzf -m --preview=\"batcat --color=always {}\")'" >> "$HOME/.zshrc"
-  printf "\e[1;33mCHANGED\e[m: Added inv alias to vim...\n"
+if ! grep -qF "alias inv=" "$HOME/.aliases"; then
+  echo "alias inv='nvim \$(fzf -m --preview=\"batcat --color=always {}\")'" >> "$HOME/.aliases"
+  printf "\e[1;33mCHANGED\e[m: Added inv alias to .aliases...\n"
 else
-  printf "\e[1;32mOK\e[m: inv alias for neovim and fzf \e[1;32mis already present in .zshrc.\n"
+  printf "\e[1;32mOK\e[m: inv alias for neovim and fzf \e[1;32mis already present in .aliases.\n"
 fi

@@ -26,6 +26,7 @@ if ! grep -q "zsh-autosuggestions" ~/.zshrc; then
     printf "\e[1;33mCHANGED\e[m: zsh-autosuggestions plugin added to .zshrc.\n"
 fi
 # --- Ensure compinit is called ---
-sed -i "/^autoload -U compinit; compinit/d" "$HOME/.zshrc"
-echo "autoload -U compinit; compinit" >> "$HOME/.zshrc"
-printf "\e[1;33mCHANGED\e[m: compinit added to .zshrc.\n"
+if ! grep -q "compinit" ~/.zshrc; then
+    echo "autoload -U compinit; compinit" >> "$HOME/.zshrc"
+    printf "\e[1;33mCHANGED\e[m: compinit is not called in .zshrc. Adding it...\n"
+fi

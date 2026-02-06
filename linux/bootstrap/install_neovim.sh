@@ -94,16 +94,12 @@ if ! grep -qF "alias vim='nvim'" "$ALIAS_FILE"; then
   echo "alias vim='nvim'" >> "$ALIAS_FILE"
   changed "Added alias vim='nvim' to .aliases..."
 fi
-if ! grep -qF "source $ALIAS_FILE" "$ZSHRC"; then
+if ! grep -qF ".aliases" "$ZSHRC"; then
   echo "source $ALIAS_FILE" >> "$ZSHRC"
   changed "Sourced .aliases in .zshrc..."
 fi
 
 # 2) Default EDITOR and VISUAL and MANPAGER to nvim
-if ! grep -q 'export PATH=$PATH:/usr/local/nvim/bin/nvim' "$ZSHENV"; then
-  echo 'export PATH=$PATH:/usr/local/nvim/bin/nvim' >> "$ZSHENV"
-  changed "Added Neovim to PATH in .zshenv..."
-fi
 if ! grep -q 'export EDITOR=nvim' "$ZSHENV"; then
   if grep -q '^export EDITOR=' "$ZSHENV"; then
     sed -i 's|^export EDITOR=.*|export EDITOR=nvim|' "$ZSHENV"

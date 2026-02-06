@@ -71,7 +71,7 @@ function Get-StatusFooter {
                     Where-Object { $_.Trim() }).Count
     } catch { $wslCount = 0 }
     try { $os = Get-CimInstance Win32_OperatingSystem; $win="$($os.Caption) ($($os.BuildNumber))" } catch { $win="Unknown" }
-    return "WSL instances: $wslCount | Windows: $win"
+    return "WSL instances: $wslCount | $win"
 }
 
 # =========================
@@ -162,11 +162,13 @@ function Manage-Distrib {
 
     # Update terminal profile
     try {
-        & $terminalScriptPath -profileName $wslName -colorScheme $themeToUse
+        & $terminalScriptPath -profileName $wslName -colorScheme $themeToUse -ErrorAction Stop
+        Write-Host "Terminal profile updated successfully"
     }
     catch {
         Write-Warning "Terminal profile update failed: $_"
     }
+    Start-Sleep -Seconds 2
 
     Read-Host "Press Enter to continue..."
 }
@@ -202,6 +204,42 @@ function Menu-Install {
 
     if ($null -eq $choice) { return }
     Manage-Distrib -Index $choice
+}
+
+function Menu-refreshTerminal {
+    $instances = (wsl.exe --list --quiet 2>$null) -replace '\x00', '' |
+                 ForEach-Object { $_.Trim() } |
+                 Where-Object { $_ }
+    if (-not $instances) { Write-Host "No WSL instances found."; Start-Sleep 2; return }
+
+    $items = [ordered]@{}
+    foreach ($name in $instances) { $items[$name] = $name }
+
+    $instance = Select-InteractiveItem -Title "Refresh Terminal Profile for WSL Instance" -Items $items -Footer (Get-StatusFooter)
+    if ($null -eq $instance) { return }
+
+    $defaultTheme = 'One Half Dark'
+    $userTheme = Read-Host "Choose a terminal theme [$defaultTheme]"
+    $themeToUse = if ([string]::IsNullOrWhiteSpace($userTheme)) { $defaultTheme } else { $userTheme }
+
+
+    $scriptDir = if ($PSScriptRoot) { $PSScriptRoot } else { Get-Location }
+    $altDir = Join-Path $scriptDir 'windows\manageDistrib'
+    $terminalScriptPath = Join-Path $altDir 'terminalSettings.ps1'
+
+    if (-not (Test-Path $terminalScriptPath)) {
+        Write-Warning "Terminal settings script not found."
+        Start-Sleep 2
+        return
+    }
+
+    try {
+        & $terminalScriptPath -profileName $instance -colorScheme $themeToUse -ErrorAction Stop
+        Write-Host "Terminal profile refreshed successfully"
+    }
+    catch {
+        Write-Warning "Terminal profile refresh failed: $_"
+    }
 }
 
 function Menu-Uninstall {
@@ -249,15 +287,17 @@ function Show-Menu {
     while ($true) {
         $items = [ordered]@{
             Install   = "Install Linux distribution"
+            Refresh   = "Refresh Terminal Profile"
             Uninstall = "Uninstall WSL distribution"
             Local     = "Local Windows settings"
             Exit      = "Exit"
         }
 
-        $action = Select-InteractiveItem -Title "WSL Workstation Setup" -Items $items -Footer (Get-StatusFooter) -KeyList @('Install', 'Uninstall', 'Local', 'Exit')
+        $action = Select-InteractiveItem -Title "WSL Workstation Setup" -Items $items -Footer (Get-StatusFooter) -KeyList @('Install', 'Refresh', 'Uninstall', 'Local', 'Exit')
         if ($null -eq $action -or $action -eq 'Exit') { return }
         switch ($action) {
             'Install'   { Menu-Install }
+            'Refresh'   { Menu-refreshTerminal }
             'Uninstall' { Menu-Uninstall }
             'Local'     { Menu-LocalSettings }
         }

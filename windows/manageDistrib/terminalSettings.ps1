@@ -43,7 +43,7 @@ if ($null -ne $profile_terminal) {
     Write-Host "Updated Terminal profile '$profileName' with colorScheme '$colorScheme'"
 }
 else {
-    Write-Warning "Profile '$profileName' not found"
+    throw "Profile '$profileName' not found"
 }
 
 # Save settings

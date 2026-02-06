@@ -1,7 +1,10 @@
 k9s:
   ui:
-    headless: true
-    skin: default
+    enableMouse: false
+    headless: false
+    logoless: true
+    crumbsless: false
+    skin: dracula
     defaultsToFullScreen: true
   logger:
     tail: 100

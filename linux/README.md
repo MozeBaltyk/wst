@@ -26,8 +26,12 @@ I don't want to challenge all the stack but good to be in mind few technical cho
 
 * *tmux* - Why ?
 * *neovim* - Why ?
+    - junegunn/vim-plug vs lazy.vim ?
+    - init.lua only for neovim
+    - why not AstroVIM ?
 * *ZSH* - Why ? 
     - Why `ZSH_THEME="robbyrussell"` ?
+    - Why `Oh-my-zsh` and not ZIM ? 
 * *Podman* - Why not *docker* ?
 * *uv* - Why not *pyenv* ?
 

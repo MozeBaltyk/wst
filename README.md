@@ -76,6 +76,12 @@ tree -L 2
     └── manageDistrib     # WSL distribution management scripts
 ```
 
+## Measure Pert
+
+```bash
+vim --startuptime /tmp/log
+```
+
 ## Nice Inspirations
 
 * [Khuedoan dotfiles](https://github.com/khuedoan/dotfiles)
@@ -83,3 +89,5 @@ tree -L 2
 * [How core git dev configure their git?](https://blog.gitbutler.com/how-git-core-devs-configure-git)
 
 * [Foot Terminal](https://medspx.fr/blog/Sysadmin/foot_terminal/): This one could be fun to create some custom popup...
+
+* [Customize k9s skin](https://k9scli.io/topics/skins/)
