@@ -19,8 +19,6 @@ alias gcom='git checkout master'
 alias gp='git push'
 alias gl='git log --decorate --oneline --graph'
 alias gL='git log -p --shortstat'
-alias mgs='nix run nixpkgs#mgitstatus --'
-alias mgS='nix run nixpkgs#mgitstatus -- -f'
 
 # tmux
 alias t='tmux'
@@ -41,7 +39,6 @@ alias officetopdf='libreoffice --headless --convert-to pdf'
 alias bat='batcat --color=always'
 alias inv='nvim $(fzf -m --preview="bat --color=always {}")'
 alias xat='fzf --preview="bat --color=always --style=numbers --line-range=:500 {}"'
-
 
 # Usefull functions
 
