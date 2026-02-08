@@ -283,8 +283,15 @@ function Menu-LocalSettings {
 # =========================
 # Main Loop
 # =========================
+function Clear-ConsoleInputBuffer {
+    while ([Console]::KeyAvailable) {
+        [Console]::ReadKey($true) | Out-Null
+    }
+}
 
 function Show-Menu {
+    Clear-ConsoleInputBuffer
+    
     while ($true) {
         $items = [ordered]@{
             Install   = "Install Linux distribution"
