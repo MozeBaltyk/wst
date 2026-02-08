@@ -229,7 +229,7 @@ function Menu-refreshTerminal {
 
     if (-not (Test-Path $terminalScriptPath)) {
         Write-Warning "Terminal settings script not found."
-        Start-Sleep 2
+        Start-Sleep 7
         return
     }
 
@@ -239,6 +239,7 @@ function Menu-refreshTerminal {
     }
     catch {
         Write-Warning "Terminal profile refresh failed: $_"
+        Start-Sleep 7
     }
 }
 

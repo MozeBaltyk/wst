@@ -4,7 +4,7 @@ k9s:
     headless: false
     logoless: true
     crumbsless: false
-    skin: dracula
+    skin: monokai
     defaultsToFullScreen: true
   logger:
     tail: 100

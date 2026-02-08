@@ -3,7 +3,10 @@ param(
     [string]$profileName,
 
     [Parameter(Mandatory = $true)]
-    [string]$colorScheme
+    [string]$colorScheme,
+
+    [string]$fontFace = "Consolas",
+    [int]$fontSize = 14
 )
 
 # Handle old and new Windows Terminal settings paths
@@ -40,7 +43,14 @@ if ($null -ne $profile_terminal) {
     $profile_terminal | Add-Member -MemberType NoteProperty -Name opacity -Value 80 -Force
     $profile_terminal | Add-Member -MemberType NoteProperty -Name useAcrylic -Value $false -Force
 
-    Write-Host "Updated Terminal profile '$profileName' with colorScheme '$colorScheme'"
+    if (-not $profile_terminal.font) {
+        $profile_terminal | Add-Member -MemberType NoteProperty -Name font -Value (@{}) -Force
+    }
+
+    $profile_terminal.font.face = $fontFace
+    $profile_terminal.font.size = $fontSize
+
+    Write-Host "Updated Terminal profile '$profileName' (theme=$colorScheme, font=$fontFace, size=$fontSize)"
 }
 else {
     throw "Profile '$profileName' not found"
@@ -49,5 +59,3 @@ else {
 # Save settings
 $settings | ConvertTo-Json -Depth 10 | Set-Content $settingsPath -Encoding UTF8
 Write-Host "Saved Windows Terminal settings to $settingsPath"
-
-return
