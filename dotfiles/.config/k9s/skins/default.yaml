@@ -1,37 +1,44 @@
-k9s:
-  body:
-    fgColor: white
-    bgColor: default
-  frame:
-    border:
-      fgColor: white
-      focusColor: white
-    crumbs:
-      fgColor: white
-      bgColor: default
-      activeColor: black
-    status:
-      newColor: green
-      pendingColor: yellow
-      errorColor: red
-    title:
-      fgColor: white
-      bgColor: default
-  views:
-    table:
-      fgColor: white
-      bgColor: default
-      header:
-        fgColor: black
-        bgColor: white
-        sorterColor: black
-    yaml:
-      keyColor: red
-      colonColor: blue
-      valueColor: white
-    logs:
-      fgColor: white
-      bgColor: default
-      indicator:
-        fgColor: black
-        bgColor: white
+plugins:
+  dive:
+    shortCut: Shift-D
+    confirm: false
+    description: "Dive image"
+    scopes:
+      - containers
+    command: dive
+    background: false
+    args:
+      - $COL-IMAGE
+  watch-events:
+    shortCut: Shift-E
+    confirm: false
+    description: "Get events"
+    scopes:
+      - all
+    command: sh
+    background: false
+    args:
+      - -c
+      - "watch -n 5 kubectl get events --context $CONTEXT --namespace $NAMESPACE --field-selector involvedObject.name=$NAME"
+  helm-values:
+    shortCut: Shift-V
+    confirm: false
+    description: "Get Helm values"
+    scopes:
+      - helm
+    command: sh
+    background: false
+    args:
+      - -c
+      - helm get values $COL-NAME -n $NAMESPACE --kube-context $CONTEXT | nvim -R
+  secret-tls:
+    shortCut: Shift-C
+    confirm: false
+    description: "View TLS certificate"
+    scopes:
+      - secrets
+    command: sh
+    background: false
+    args:
+      - -c
+      - kubectl get secret --context $CONTEXT -n $NAMESPACE $NAME -o jsonpath='{.data.tls\.crt}' | base64 -d | openssl storeutl -noout -text -certs /dev/stdin |& nvim -R

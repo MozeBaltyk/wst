@@ -76,10 +76,17 @@ tree -L 2
     └── manageDistrib     # WSL distribution management scripts
 ```
 
-## Measure Pert
+## Measure Perf
 
 ```bash
 vim --startuptime /tmp/log
+```
+
+## For DEV 
+
+```BASH
+find dotfiles -type f -exec dos2unix -n {} +
+find linux -type f -exec dos2unix -n {} +
 ```
 
 ## Nice Inspirations

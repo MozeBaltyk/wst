@@ -1,22 +1,7 @@
-# Oh my Zsh configuration
-export ZSH="$HOME/.oh-my-zsh"
+#!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
 
-# Include Arkade in $PATH
-export PATH="$PATH:$HOME/.arkade/bin"
+# Performs a speed test
 
-# Include custom scripts in $PATH
-export PATH="$PATH:$HOME/.local/bin"
-
-# Go
-export GOPATH="$HOME/.local"
-
-# Rust
-export CARGO_HOME="$HOME/.local"
-
-# Nvim
-export EDITOR=nvim
-export VISUAL=nvim
-export MANPAGER='nvim +Man!'
-
-# Krew
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -

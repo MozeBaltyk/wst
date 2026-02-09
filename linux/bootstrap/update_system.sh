@@ -1,12 +1,10 @@
 #!/usr/bin/env bash
 
-# Updates and upgrades the system using apt.
-sudo apt update >/dev/null 2>&1
-printf "\e[1;33mCHANGED\e[m: Updated the system...\n"
-sudo apt full-upgrade -y >/dev/null 2>&1
-printf "\e[1;33mCHANGED\e[m: Upgraded the system...\n"
-sudo apt autoremove -y >/dev/null 2>&1
-printf "\e[1;33mCHANGED\e[m: Removed unused packages...\n"
-sudo apt autoclean >/dev/null 2>&1  && sudo apt clean >/dev/null 2>&1
-printf "\e[1;33mCHANGED\e[m: Cleaned up packages...\n"
-printf "\e[1;33mCHANGED\e[m: System update and upgrade completed.\n"
+# Adds the current user to the NOPASSWD sudo access if it's not already there.
+if sudo --non-interactive true 2>/dev/null; then
+    printf "\e[1;32mOK\e[m: ${USER} \e[1;32mhas NOPASSWD sudo access.\n"
+else
+    sudo touch /etc/sudoers.d/${USER}
+    echo "${USER} ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers.d/${USER}
+    printf "\e[1;32mCHANGED\e[m: ${USER} has been added with NOPASSWD sudo access.\n"
+fi

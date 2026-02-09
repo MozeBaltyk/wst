@@ -1,10 +1,20 @@
 #!/usr/bin/env bash
 
-# Checks if /etc/hosts is owned by the user and changes the ownership if not.
+ARKADE_BIN="$HOME/.arkade/bin"
 
-if [[ "$(stat -c '%U' /etc/hosts)" != "${USER}" ]]; then
-    sudo chown ${USER}:${USER} /etc/hosts
-    printf "\e[1;33mCHANGED\e[m: Ownership of /etc/hosts changed to ${USER}.\n"
+# Add for current session
+export PATH="$ARKADE_BIN:$PATH"
+
+# Determine shell config
+SHELL_RC="$HOME/.zshenv"
+if [ -n "$BASH_VERSION" ] || [[ "$SHELL" == */bash ]]; then
+    SHELL_RC="$HOME/.bashrc"
+fi
+
+# Add permanently if not already there
+if ! grep -Fxq 'export PATH="$HOME/.arkade/bin:$PATH"' "$SHELL_RC"; then
+    echo 'export PATH="$HOME/.arkade/bin:$PATH"' >> "$SHELL_RC"
+    printf "\e[1;33mCHANGED\e[m: Added ~/.arkade/bin to PATH in $SHELL_RC.\n"
 else
-    printf "\e[1;32mOK\e[m: /etc/hosts is already owned by ${USER}.\n"
+    printf "\e[1;32mOK\e[m: ~/.arkade/bin already in PATH in $SHELL_RC.\n"
 fi
