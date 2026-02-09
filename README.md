@@ -37,7 +37,7 @@ Since they are POSIX-compliant, they should also work on macOS or BSD (as long a
 
 ## 🚀 Getting Started
 
-1. Clone the repository on your windows
+1. Clone the repository on your windows (or Fork it if you want to customize dotfile)
 
 2. From powershell, just run the *menu*, it should show the way...
 
