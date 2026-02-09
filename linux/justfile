@@ -1,20 +1,84 @@
-#!/usr/bin/bash
+# just
 
-# Check if 'just' is installed
-if ! command -v just &> /dev/null
-then
-    # Fetch the latest version of arkade from the GitHub API
-    LATEST_VERSION_URL="https://api.github.com/repos/alexellis/arkade/releases/latest"
-    DOWNLOAD_URL="https://github.com/alexellis/arkade/releases/download"
-    LATEST_VERSION=$(curl -s $LATEST_VERSION_URL | grep 'tag_name' | cut -d\" -f4)
-    curl -sLO "${DOWNLOAD_URL}"/"${LATEST_VERSION}"/arkade
-    chmod +x arkade && mkdir -p $HOME/.local/bin
-    mv arkade $HOME/.local/bin/
-    export PATH=$PATH:$HOME/.local/bin/
+# Lists all available commands in the justfile.
+_help:
+    @just --list --unsorted
 
-    # Use arkade to install 'just' and add it to the path
-    arkade get just --quiet && export PATH=$PATH:$HOME/.arkade/bin/
-fi
+# Verify prerequisites
+install_prerequisites:
+    @bash ./bootstrap/set_nopasswd.sh
+    @bash ./bootstrap/set_hostfile.sh
+    @bash ./bootstrap/set_arkade_to_path.sh
 
-# Run the 'all' command with 'just'
-just all
+# Updating and upgrading the system
+updates_system:
+    @bash ./bootstrap/update_system.sh
+
+# Installing and configuring zsh
+install_zsh:
+    @bash ./bootstrap/add_zsh.sh
+    @bash ./bootstrap/add_zsh_plugins.sh
+
+# Installing tmux terminal multiplexer
+install_tmux:
+    @bash ./bootstrap/add_tmux_autostart.sh
+    @bash ./bootstrap/add_tmux_tpm.sh
+    @bash ./bootstrap/add_tmuxsensible.sh
+    @bash ./bootstrap/add_tmuxlogging.sh
+
+# Install custom tools and utilities
+install_custom_tools:
+    @bash ./bootstrap/install_arkade.sh
+    @bash ./bootstrap/install_just.sh
+    @bash ./bootstrap/install_bat.sh
+    @bash ./bootstrap/install_podman.sh
+    @bash ./bootstrap/install_ripgrep.sh
+
+# Install Neovim (or update if already installed)
+install_neovim:
+    @bash ./bootstrap/install_neovim.sh
+
+# Installs a list of tools based on arkade using _install and _annoying.
+install_tools:  
+    @bash ./bootstrap/install_tools.sh "helm"
+    @bash ./bootstrap/install_tools.sh "k9s"
+    @bash ./bootstrap/install_tools.sh "kube-bench"
+    @bash ./bootstrap/install_tools.sh "kubecm"
+    @bash ./bootstrap/install_tools.sh "kubectl"
+    @bash ./bootstrap/install_tools.sh "kustomize"
+    @bash ./bootstrap/install_tools.sh "oc"
+    @bash ./bootstrap/install_tools.sh "openshift-install"
+    @bash ./bootstrap/install_tools.sh "operator-sdk"
+    @bash ./bootstrap/install_tools.sh "popeye"
+    @bash ./bootstrap/install_tools.sh "trivy"
+    @bash ./bootstrap/annoying_tools.sh "jq"
+    @bash ./bootstrap/annoying_tools.sh "yq"
+    @bash ./bootstrap/annoying_tools.sh "vault"
+    @bash ./bootstrap/annoying_tools.sh "tofu"
+    @bash ./bootstrap/annoying_tools.sh "fzf"
+    @bash ./bootstrap/annoying_tools.sh "krew"
+    @bash ./bootstrap/completion_jq.sh
+    @bash ./bootstrap/completion_yq.sh
+    @bash ./bootstrap/completion_harshicorp.sh
+    @bash ./bootstrap/completion_fzf.sh
+    @bash ./bootstrap/krew_path.sh
+
+
+# A master function that runs the above functions in sequence to setup the system.
+all:
+    #!/usr/bin/env bash
+    printf "\n\e[1;33m========>            Starting system setup             <========\e[m\n"
+    printf "\n\e[1;90m---->                 Verify prerequisites                 <----\e[m\n"
+    just install_prerequisites
+    printf "\n\e[1;90m---->          Updating and upgrading the system           <----\e[m\n"
+    just updates_system
+    printf "\n\e[1;90m---->            Installing and configuring zsh            <----\e[m\n"
+    just install_zsh
+    printf "\n\e[1;90m---->         Installing tmux terminal multiplexer         <----\e[m\n"
+    just install_tmux
+    printf "\n\e[1;90m---->             Installing additional tools              <----\e[m\n"
+    just install_custom_tools
+    just install_neovim
+    just install_tools
+    printf "\n\e[1;90m---->                 Installing dev tools                 <----\e[m\n"
+    printf "\n\e[1;32m========>     System setup completed successfully!     <========\e[m\n"

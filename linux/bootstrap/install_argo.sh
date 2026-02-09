@@ -1,11 +1,30 @@
 #!/usr/bin/env bash
 
-# Adds command completion for yq.
+# VARS
+TOOL="argo"
+ARGO_OS="linux"
 ZSH="$HOME/.oh-my-zsh"
-mkdir -p $ZSH/completions
-if [[ -s "$ZSH/completions/_yq" ]]; then
-    printf "\e[1;32mOK\e[m: yq completion already exists.\n" >/dev/null 2>&1
-else
-    yq shell-completion zsh > "$ZSH/completions/_yq"
-    printf "\e[1;33mCHANGED\e[m: Generated command completion file _yq.\n"
+
+# Get the latest first
+curl -sLO "https://github.com/argoproj/argo-workflows/releases/download/v4.0.0/argo-$ARGO_OS-amd64.gz"
+gunzip "argo-$ARGO_OS-amd64.gz"
+chmod +x "argo-$ARGO_OS-amd64"
+mv "./argo-$ARGO_OS-amd64" /usr/local/bin/argo
+sudo mv "./argo-$ARGO_OS-amd64" /usr/local/bin/argo
+
+# --- ZSH COMPLETION ---
+COMPLETION_OUTPUT=$("$TOOL" completion zsh 2>/dev/null || true)
+
+if [ -n "$COMPLETION_OUTPUT" ]; then
+    mkdir -p "$ZSH/completions"
+    COMPLETION_FILE="$ZSH/completions/_$TOOL"
+
+    if [[ -s "$COMPLETION_FILE" ]]; then
+        printf "\e[1;32mOK\e[m: %s completion already exists.\n" "$TOOL"
+    else
+        printf "\e[1;33mCHANGED\e[m: Generating command completion file _%s...\n" "$TOOL"
+        echo "$COMPLETION_OUTPUT" > "$COMPLETION_FILE"
+    fi
+    else
+        printf "\e[1;33mWARNING\e[m: %s does not support zsh completions or command failed.\n" "$TOOL"
 fi

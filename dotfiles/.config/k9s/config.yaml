@@ -1,9 +1,14 @@
-aliases:
-  dep: deployments
-  sec: v1/secrets
-  jo: jobs
-  cr: clusterroles
-  crb: clusterrolebindings
-  ro: roles
-  rb: rolebindings
-  np: networkpolicies
+k9s:
+  ui:
+    enableMouse: false
+    headless: false
+    logoless: true
+    crumbsless: false
+    skin: monokai
+    defaultsToFullScreen: true
+  logger:
+    tail: 100
+    buffer: 5000
+    sinceSeconds: -1
+  noExitOnCtrlC: true
+  skipLatestRevCheck: true

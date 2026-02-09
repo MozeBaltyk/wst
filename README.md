@@ -42,8 +42,10 @@ Since they are POSIX-compliant, they should also work on macOS or BSD (as long a
 2. From powershell, just run the *menu*, it should show the way...
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File menu.ps1
 .\menu.ps1
+
+# if Powershell block for some rights
+powershell -NoProfile -ExecutionPolicy Bypass -File menu.ps1
 ```  
 
 3. If you already have Ubuntu installed on WSL (or not), you can still clone this project and use `bootstrap.sh` from terminal...
@@ -80,13 +82,6 @@ tree -L 2
 
 ```bash
 vim --startuptime /tmp/log
-```
-
-## For DEV 
-
-```BASH
-find dotfiles -type f -exec dos2unix -n {} +
-find linux -type f -exec dos2unix -n {} +
 ```
 
 ## Nice Inspirations

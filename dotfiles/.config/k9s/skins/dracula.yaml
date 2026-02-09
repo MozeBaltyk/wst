@@ -1,4 +1,4 @@
-# monokai.yml
+# dracula.yml
 # Styles...
 foreground: &foreground "#f8f8f2"
 background: &background "default"

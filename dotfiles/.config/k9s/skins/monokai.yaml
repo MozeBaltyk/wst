@@ -1,17 +1,15 @@
 # monokai.yml
 # Styles...
-foreground: &foreground "#f8f8f2"
+foreground: &foreground "#ffffff"
 background: &background "default"
-current_line: &current_line "#44475a"
-selection: &selection "#44475a"
-comment: &comment "#6272a4"
-cyan: &cyan "#8be9fd"
-green: &green "#50fa7b"
-orange: &orange "#ffb86c"
-pink: &pink "#ff79c6"
-purple: &purple "#bd93f9"
-red: &red "#ff5555"
-yellow: &yellow "#f1fa8c"
+backgroundOpaque: &backgroundOpaque "#333333"
+magenta: &magenta "#f72972"
+orange: &orange "#e47c20"
+lightBlue: &lightBlue "#c3eff7"
+blue: &blue "#69d9ed"
+darkBlue: &darkBlue "#3174a2"
+green: &green "#a7e24c"
+purple: &purple "#856cc4"
 
 # Skin...
 k9s:
@@ -19,94 +17,115 @@ k9s:
   body:
     fgColor: *foreground
     bgColor: *background
-    logoColor: *purple
+    logoColor: *magenta
   # Command prompt styles
   prompt:
     fgColor: *foreground
     bgColor: *background
-    suggestColor: *purple
+    suggestColor: *orange
   # ClusterInfoView styles.
   info:
-    fgColor: *pink
-    sectionColor: *foreground
+    fgColor: *blue
+    sectionColor: *lightBlue
   # Dialog styles.
   dialog:
     fgColor: *foreground
     bgColor: *background
     buttonFgColor: *foreground
-    buttonBgColor: *purple
-    buttonFocusFgColor: *yellow
-    buttonFocusBgColor: *pink
+    buttonBgColor: *green
+    buttonFocusFgColor: *foreground
+    buttonFocusBgColor: *darkBlue
     labelFgColor: *orange
-    fieldFgColor: *foreground
+    fieldFgColor: *blue
   frame:
     # Borders styles.
     border:
-      fgColor: *selection
-      focusColor: *current_line
+      fgColor: *blue
+      focusColor: *darkBlue
     menu:
-      fgColor: *foreground
-      keyColor: *pink
+      fgColor: *lightBlue
+      keyColor: *green
       # Used for favorite namespaces
-      numKeyColor: *pink
+      numKeyColor: *green
     # CrumbView attributes for history navigation.
     crumbs:
       fgColor: *foreground
-      bgColor: *current_line
-      activeColor: *current_line
+      bgColor: *backgroundOpaque
+      activeColor: *blue
     # Resource status and update styles
     status:
-      newColor: *cyan
+      newColor: *blue
       modifyColor: *purple
       addColor: *green
-      errorColor: *red
-      highlightColor: *orange
-      killColor: *comment
-      completedColor: *comment
+      pendingColor: *orange
+      errorColor: *magenta
+      highlightColor: *blue
+      killColor: *green
+      completedColor: *darkBlue
     # Border title styles.
     title:
       fgColor: *foreground
-      bgColor: *current_line
-      highlightColor: *orange
-      counterColor: *purple
-      filterColor: *pink
+      bgColor: *background
+      highlightColor: *blue
+      counterColor: *lightBlue
+      filterColor: *orange
   views:
     # Charts skins...
     charts:
-      bgColor: default
+      bgColor: *background
+      dialBgColor: *background
+      chartBgColor: *backgroundOpaque
       defaultDialColors:
-        - *purple
-        - *red
+        - *blue
+        - *magenta
       defaultChartColors:
-        - *purple
-        - *red
+        - *blue
+        - *magenta
+      resourceColors:
+        batch/v1/jobs:
+          - *blue
+          - *magenta
+        v1/persistentvolumes:
+          - *blue
+          - *magenta
+        cpu:
+          - *blue
+          - *magenta
+        mem:
+          - *blue
+          - *magenta
+        v1/events:
+          - *blue
+          - *magenta
+        v1/pods:
+          - *blue
+          - *magenta
     # TableView attributes.
     table:
       fgColor: *foreground
       bgColor: *background
+      markColor: *magenta
       # Header row styles.
       header:
         fgColor: *foreground
-        bgColor: *background
-        sorterColor: *cyan
+        bgColor: *backgroundOpaque
+        sorterColor: *blue
     # Xray view attributes.
     xray:
       fgColor: *foreground
       bgColor: *background
-      cursorColor: *current_line
-      graphicColor: *purple
-      showIcons: false
+      cursorColor: *blue
+      cursorTextColor: *foreground
+      graphicColor: *blue
     # YAML info styles.
     yaml:
-      keyColor: *pink
-      colonColor: *purple
+      keyColor: *orange
+      colonColor: *orange
       valueColor: *foreground
     # Logs styles.
     logs:
       fgColor: *foreground
-      bgColor: *background
+      bgColor: *backgroundOpaque
       indicator:
         fgColor: *foreground
-        bgColor: *purple
-        toggleOnColor: *green
-        toggleOffColor: *cyan
+        bgColor: *darkBlue
