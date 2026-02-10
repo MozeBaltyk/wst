@@ -33,6 +33,7 @@ install_custom_tools:
     @bash ./bootstrap/install_bat.sh
     @bash ./bootstrap/install_podman.sh
     @bash ./bootstrap/install_ripgrep.sh
+    @bash ./bootstrap/install_system_package.sh
 
 # Install Neovim (or update if already installed)
 install_neovim:
