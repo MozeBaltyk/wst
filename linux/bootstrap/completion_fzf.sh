@@ -41,4 +41,3 @@ if ! grep -qF "alias inv=" "$HOME/.aliases"; then
 else
   printf "\e[1;32mOK\e[m: inv alias for neovim and fzf \e[1;32mis already present in .aliases.\n"
 fi
-
