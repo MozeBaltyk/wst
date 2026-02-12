@@ -28,12 +28,12 @@ alias ta='tmux attach'
 alias less='less --RAW-CONTROL-CHARS'
 
 # nvim
-alias v='nvim'
-alias vi='nvim'
-alias vim='nvim'
-
-# convert to PDF
-alias officetopdf='libreoffice --headless --convert-to pdf'
+# use nvim if available
+if [ -x "$(command -v nvim)" ]; then
+  alias v='nvim'
+  alias vi='nvim'
+  alias vim='nvim'
+fi
 
 # fzf with bat preview
 alias bat='batcat --color=always'
@@ -76,3 +76,8 @@ alias xat='fzf --preview="bat --color=always --style=numbers --line-range=:500 {
 #   myps: List processes owned by my user:
 #   ------------------------------------------------------------
     myps() { ps $@ -u $USER -o pid,%cpu,%mem,start,time,bsdtime,command ; }
+
+# Find out what's running on a given port
+    whatsonport() {
+        lsof -i tcp:$1
+    }

@@ -88,6 +88,8 @@ vim --startuptime /tmp/log
 
 * [Khuedoan dotfiles](https://github.com/khuedoan/dotfiles)
 
+* [Hamvocke dotfiles](https://github.com/hamvocke/dotfiles)
+
 * [How core git dev configure their git?](https://blog.gitbutler.com/how-git-core-devs-configure-git)
 
 * [Foot Terminal](https://medspx.fr/blog/Sysadmin/foot_terminal/): This one could be fun to create some custom popup...
