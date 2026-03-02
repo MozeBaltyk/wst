@@ -80,9 +80,13 @@ tree -L 2
 
 ## Measure Perf
 
-```bash
-vim --startuptime /tmp/log
+* Open ZSH 
+
+```BASH
+time zsh -i -c exit
+zsh -i -c exit  0.53s user 0.79s system 87% cpu 1.518 total
 ```
+
 
 ## Nice Inspirations
 
